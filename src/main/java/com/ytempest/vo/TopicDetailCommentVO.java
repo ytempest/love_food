@@ -7,7 +7,7 @@ import java.util.Date;
  * Description：话题详情页每一个评论的信息
  */
 public class TopicDetailCommentVO {
-    private long userId;
+    private Long userId;
     private String userHeadUrl;
     private String userAccount;
     private String replyContent;
@@ -16,11 +16,11 @@ public class TopicDetailCommentVO {
     public TopicDetailCommentVO() {
     }
 
-    public long getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

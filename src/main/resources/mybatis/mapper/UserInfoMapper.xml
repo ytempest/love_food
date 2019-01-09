@@ -38,22 +38,22 @@
     <!-- 插入用户 -->
     <!-- 如果Sql的入参是一个类，那么要在#{}中写该类的属性名 -->
     <insert id="insert" parameterType="com.ytempest.vo.UserInfoVO" useGeneratedKeys="true"
-        keyProperty="commentFromUser">
+        keyProperty="userId">
 
         <!-- 配置插入后主键返回，要求这个主键必须是可以自增的类型，同时要自增 -->
         <!-- keyProperty：实体类中的主键的属性，主键返回后会保存在这个属性中 -->
         <!-- resultType：和表中的主键数据类型对应 -->
         <!-- order：指定<selectKey>在何时执行，AFTER表示在插入之后 -->
-      <!--  <selectKey keyProperty="commentFromUser" resultType="long" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>-->
+        <!--  <selectKey keyProperty="userId" resultType="long" order="AFTER">
+              SELECT LAST_INSERT_ID()
+          </selectKey>-->
         <!-- <selectKey keyProperty="stuUUID" resultType="string" order="BEFORE">
             SELECT UUID() </selectKey> -->
         INSERT INTO user_info (user_id,user_account, user_pwd, user_head_url,
         user_sex,
         user_birth, user_phone, user_email, user_qq,
         user_register_time,
-        user_status) VALUES (#{commentFromUser},
+        user_status) VALUES (#{user_id},
         #{userAccount},#{userPwd},#{userHeadUrl},#{userSex},
         #{userBirth},#{userPhone},#{userEmail},#{userQQ},
         #{userRegisterTime},#{userStatus});

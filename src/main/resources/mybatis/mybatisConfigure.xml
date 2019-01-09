@@ -8,5 +8,6 @@
         <mapper resource="mybatis/mapper/AdminInfoMapper.xml" />
         <mapper resource="mybatis/mapper/UserInfoMapper.xml" />
         <mapper resource="mybatis/mapper/TopicInfoMapper.xml" />
+        <mapper resource="mybatis/mapper/CommentInfoMapper.xml" />
     </mappers>
 </configuration>

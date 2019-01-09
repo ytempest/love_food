@@ -8,8 +8,8 @@ import java.util.List;
  * Description：
  */
 public class TopicInfoVO {
-    private long topicId;
-    private long userId;
+    private Long topicId;
+    private Long userId;
     private String userHeadUrl;
     private String userAccount;
     private String topicTitle;
@@ -17,25 +17,25 @@ public class TopicInfoVO {
     private Date topicPublishTime;
     private List<TopicImageVO> topicImage;
 
-    private long commentCount;
-    private long zanCount;
+    private Long commentCount;
+    private Long zanCount;
 
     public TopicInfoVO() {
     }
 
-    public long getTopicId() {
+    public Long getTopicId() {
         return topicId;
     }
 
-    public void setTopicId(long topicId) {
+    public void setTopicId(Long topicId) {
         this.topicId = topicId;
     }
 
-    public long getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -71,19 +71,19 @@ public class TopicInfoVO {
         this.topicImage = topicImage;
     }
 
-    public long getCommentCount() {
+    public Long getCommentCount() {
         return commentCount;
     }
 
-    public void setCommentCount(long commentCount) {
+    public void setCommentCount(Long commentCount) {
         this.commentCount = commentCount;
     }
 
-    public long getZanCount() {
+    public Long getZanCount() {
         return zanCount;
     }
 
-    public void setZanCount(long zanCount) {
+    public void setZanCount(Long zanCount) {
         this.zanCount = zanCount;
     }
 

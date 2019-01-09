@@ -7,30 +7,30 @@ import java.util.Date;
  * Description：话题详情页每一个评论的信息
  */
 public class TopicCommentInfoVO {
-    private long commentId;
-    private long commentFromUser;
+    private Long commentId;
+    private Long commentFromUser;
     private String userHeadUrl;
     private String userAccount;
     private String commentContent;
     private Date commentTime;
-    private long replyCount;
+    private Long replyCount;
 
     public TopicCommentInfoVO() {
     }
 
-    public long getCommentId() {
+    public Long getCommentId() {
         return commentId;
     }
 
-    public void setCommentId(long commentId) {
+    public void setCommentId(Long commentId) {
         this.commentId = commentId;
     }
 
-    public long getCommentFromUser() {
+    public Long getCommentFromUser() {
         return commentFromUser;
     }
 
-    public void setCommentFromUser(long commentFromUser) {
+    public void setCommentFromUser(Long commentFromUser) {
         this.commentFromUser = commentFromUser;
     }
 
@@ -66,11 +66,11 @@ public class TopicCommentInfoVO {
         this.commentTime = commentTime;
     }
 
-    public long getReplyCount() {
+    public Long getReplyCount() {
         return replyCount;
     }
 
-    public void setReplyCount(long replyCount) {
+    public void setReplyCount(Long replyCount) {
         this.replyCount = replyCount;
     }
 
