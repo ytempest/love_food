@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ytempest.mapper.AdminInfoMapper">
+	<!-- id:指定这条SQL语句的id；resultMap：指定实体类和表的映射id -->
+	<select id="selectById" resultMap="AdminInfo_Mapping">
+		select *
+		from admin_info
+		where
+		admin_account = #{account}
+	</select>
+
+
+	<!-- 配置实体类和表的映射关系 -->
+	<!-- id：映射关系的Id；type：映射的实体类 -->
+	<resultMap id="AdminInfo_Mapping"
+		type="com.ytempest.vo.AdminInfoVO">
+		<!-- 配置表的主键，property：实体类中的属性名；column：表中的字段名 -->
+		<id property="adminId" column="admin_id" />
+		<result property="adminAccount" column="admin_account" />
+		<result property="adminPwd" column="admin_pwd" />
+		<result property="adminName" column="admin_name" />
+		<result property="adminSex" column="admin_sex" />
+		<result property="adminPhone" column="admin_phone" />
+		<result property="adminEmail" column="admin_email" />
+	</resultMap>
+</mapper>

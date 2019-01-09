@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytempest.mapper.TopicInfoMapper">
+
+    <!-- 查找第index个记录之后的count个记录 -->
+    <select id="selectAll" resultMap="TopicInfo_List">
+        SELECT * FROM
+        (
+        SELECT * FROM (
+        SELECT topics.*,user_info.user_head_url,user_info.user_account FROM topics
+        LEFT JOIN user_info ON topics.user_id = user_info.user_id LIMIT #{arg0},#{arg1}) t1
+        LEFT JOIN
+        (SELECT topic_id AS topic_id2,COUNT(*) AS comment_count FROM comments GROUP BY topic_id) c
+        ON t1.topic_id = c.topic_id2
+        LEFT JOIN
+        (SELECT topic_id AS topic_id3,COUNT(*) AS zan_count FROM zans GROUP BY topic_id) z
+        ON t1.topic_id  = z.topic_id3
+        ) t2
+        LEFT JOIN topic_images
+        ON t2.topic_id = topic_images.topic_id
+	</select>
+    <!--SELECT * FROM (SELECT * FROM topics LIMIT #{arg0},#{arg1}) t
+    LEFT JOIN topic_images
+    ON t.topic_id = topic_images.topic_id-->
+    <select id="countAll" resultType="Long">
+		SELECT count(*) FROM topics;
+	</select>
+
+    <select id="selectCommentListById" resultMap="TopicInfo_Info">
+        SELECT c.*,u1.user_head_url,u1.user_account,r.* FROM comments c
+        LEFT JOIN user_info u1
+        ON  c.topic_id = #{topicId} AND u1.user_id = c.comment_from_user
+        LEFT JOIN
+        (SELECT comment_id AS r_comment_id,reply_to_user ,COUNT(*) AS reply_count FROM replys ) r
+        ON c.comment_id=r.r_comment_id
+	</select>
+
+    <select id="selectDetailComment" resultMap="Comment_Info">
+        SELECT u.user_id, u.user_head_url, u.user_account, r.* FROM
+        (SELECT * FROM replys WHERE comment_id = #{arg0}) r
+        LEFT JOIN user_info u
+        ON r.reply_from_user=u.user_id
+	</select>
+
+
+    <resultMap id="TopicInfo_List" type="com.ytempest.vo.TopicInfoVO">
+        <id property="topicId" column="topic_id" />
+        <result property="userId" column="user_id" />
+        <result property="userHeadUrl" column="user_head_url" />
+        <result property="userAccount" column="user_account" />
+        <result property="topicTitle" column="topic_title" />
+        <result property="topicContent" column="topic_content" />
+        <result property="topicPublishTime" column="topic_publish_time" />
+        <result property="commentCount" column="comment_count" />
+        <result property="zanCount" column="zan_count" />
+        <collection property="topicImage" ofType="com.ytempest.vo.TopicImageVO">
+         <!--   <id property="imageId" column="image_id" />
+            <result property="topicId" column="topic_id" />-->
+            <result property="imageUrl" column="image_url" />
+        </collection>
+    </resultMap>
+
+    <resultMap id="TopicInfo_Info" type="com.ytempest.vo.TopicCommentInfoVO">
+        <id property="commentId" column="comment_id" />
+        <result property="commentFromUser" column="comment_from_user" />
+        <result property="userHeadUrl" column="user_head_url" />
+        <result property="userAccount" column="user_account" />
+        <result property="commentContent" column="comment_content" />
+        <result property="commentTime" column="comment_time" />
+        <result property="replyCount" column="reply_count" />
+    </resultMap>
+
+    <resultMap id="Comment_Info" type="com.ytempest.vo.TopicDetailCommentVO">
+        <id property="userId" column="user_id" />
+        <result property="userHeadUrl" column="user_head_url" />
+        <result property="userAccount" column="user_account" />
+        <result property="replyContent" column="reply_content" />
+        <result property="replyTime" column="reply_time" />
+    </resultMap>
+</mapper>

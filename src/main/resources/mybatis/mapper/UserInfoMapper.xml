@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 动态代理开发规则： --><!-- 1、namespace必须是Dao接口的全路径名 --><!-- 2、接口的方法名必需与sql id 一致 --><!-- 3、接口的入参与parameterType类型一致 --><!-- 4、接口的返回值必须与resultType类型一致 -->
+
+<!-- 动态代理开发的好处：如果要扩展DAO的功能，只需要在接口中添加相应的功能，然后在Mapper映射文件中添加相应的Sql语句就可以实现扩展 -->
+<mapper namespace="com.ytempest.mapper.UserInfoMapper">
+
+    <!-- 通过用户名模糊搜索 -->
+    <select id="fuzzySearchByAccount" resultMap="UserInfo_Mapping">·
+		select *
+		from
+		user_info
+		where
+		user_account like '%${arg0}%' limit #{arg1},#{arg2}
+	</select>
+
+    <!-- 统计满足模糊搜索的记录数量 -->
+    <select id="countFuzzySearch" resultType="Long">
+		select count(*)
+		from
+		user_info
+		where
+		user_account like '%${value}%'
+	</select>
+
+
+    <!-- id:指定这条SQL语句的id；resultMap：指定实体类和表的映射id -->
+    <select id="selectById" resultMap="UserInfo_Mapping">
+		select *
+		from user_info
+		where
+		user_account = #{account}
+	</select>
+
+
+    <!-- 插入用户 -->
+    <!-- 如果Sql的入参是一个类，那么要在#{}中写该类的属性名 -->
+    <insert id="insert" parameterType="com.ytempest.vo.UserInfoVO" useGeneratedKeys="true"
+        keyProperty="commentFromUser">
+
+        <!-- 配置插入后主键返回，要求这个主键必须是可以自增的类型，同时要自增 -->
+        <!-- keyProperty：实体类中的主键的属性，主键返回后会保存在这个属性中 -->
+        <!-- resultType：和表中的主键数据类型对应 -->
+        <!-- order：指定<selectKey>在何时执行，AFTER表示在插入之后 -->
+      <!--  <selectKey keyProperty="commentFromUser" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>-->
+        <!-- <selectKey keyProperty="stuUUID" resultType="string" order="BEFORE">
+            SELECT UUID() </selectKey> -->
+        INSERT INTO user_info (user_id,user_account, user_pwd, user_head_url,
+        user_sex,
+        user_birth, user_phone, user_email, user_qq,
+        user_register_time,
+        user_status) VALUES (#{commentFromUser},
+        #{userAccount},#{userPwd},#{userHeadUrl},#{userSex},
+        #{userBirth},#{userPhone},#{userEmail},#{userQQ},
+        #{userRegisterTime},#{userStatus});
+    </insert>
+
+
+    <!-- 更新用户 -->
+    <update id="updateById">
+		UPDATE user_info
+		SET
+		user_pwd =
+		#{userPwd},
+		user_head_url = #{userHeadUrl},
+		user_sex =
+		#{userSex},
+		user_birth =
+		#{userBirth},
+		user_phone =
+		#{userPhone},
+		user_email =
+		#{userEmail},
+		user_qq = #{userQQ},
+		user_register_time =
+		#{userRegisterTime},
+		user_status = #{userStatus}
+		WHERE
+		user_account =
+		#{userAccount};
+	</update>
+
+
+    <!-- 查找第index个记录之后的count个记录 -->
+    <select id="selectAll" resultMap="UserInfo_Mapping">
+		SELECT * FROM user_info LIMIT
+		#{arg0},#{arg1};
+	</select>
+
+    <select id="countAll" resultType="Long">
+		SELECT count(*) FROM user_info;
+	</select>
+
+
+    <!-- 配置实体类和表的映射关系 -->
+    <!-- id：映射关系的Id；type：映射的实体类 -->
+    <resultMap id="UserInfo_Mapping" type="com.ytempest.vo.UserInfoVO">
+        <!-- 配置表的主键，property：实体类中的属性名；column：表中的字段名 -->
+        <id property="userId" column="user_id" />
+        <result property="userAccount" column="user_account" />
+        <result property="userPwd" column="user_pwd" />
+        <result property="userHeadUrl" column="user_head_url" />
+        <result property="userSex" column="user_sex" />
+        <result property="userBirth" column="user_birth" />
+        <result property="userPhone" column="user_phone" />
+        <result property="userEmail" column="user_email" />
+        <result property="userQQ" column="user_qq" />
+        <result property="userRegisterTime" column="user_register_time" />
+        <result property="userStatus" column="user_status" />
+    </resultMap>
+</mapper>

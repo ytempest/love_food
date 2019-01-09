@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd 
+                        http://www.springframework.org/schema/context 
+                        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 加载C3P0的配置文件 -->
+    <context:property-placeholder location="classpath:spring/jdbc.properties" />
+
+    <!-- 配置C3P0连接池 -->
+    <bean id="DataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${jdbc.driver}" />
+        <property name="jdbcUrl" value="${jdbc.url}" />
+        <property name="user" value="${jdbc.user}" />
+        <property name="password" value="${jdbc.password}" />
+    </bean>
+
+
+    <!-- SqlSessionFactory配置 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="DataSource" />
+        <!-- 加载mybatis核心配置文件 -->
+        <property name="configLocation" value="classpath:mybatis/mybatisConfigure.xml" />
+        <!-- 别名包扫描 -->
+        <property name="typeAliasesPackage" value="com.ytempest.vo" />
+    </bean>
+
+    <!-- 第二种方式：包扫描（推荐） -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.ytempest.mapper" />
+    </bean>
+
+
+    <!-- 配置controller扫描包 -->
+    <context:component-scan base-package="com.ytempest.mapper" />
+
+
+    <!-- 配置controller扫描包 -->
+    <context:component-scan base-package="com.ytempest.service" />
+</beans>
