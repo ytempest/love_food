@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytempest.mapper.ReplyInfoMapper">
+
+    <!-- 插入用户 -->
+    <insert id="insert" parameterType="com.ytempest.vo.ReplyInfoVO" useGeneratedKeys="true"
+        keyProperty="reply_id">
+        INSERT INTO replys(
+        reply_id, comment_id, reply_content, reply_time, reply_from_user, reply_to_user)
+        VALUES ( #{replyId},#{commentId},#{replyContent},#{replyTime},#{replyFromUser},#{replyToUser});
+    </insert>
+
+</mapper>

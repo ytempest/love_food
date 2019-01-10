@@ -4,10 +4,12 @@ import com.ytempest.common.LogUtils;
 import com.ytempest.common.ResultUtils;
 import com.ytempest.exception.ServiceException;
 import com.ytempest.service.CommentInfoService;
+import com.ytempest.service.ReplyInfoService;
 import com.ytempest.service.TopicInfoService;
 import com.ytempest.vo.BaseResult;
 import com.ytempest.vo.CommentInfoVO;
 import com.ytempest.vo.PageVO;
+import com.ytempest.vo.ReplyInfoVO;
 import com.ytempest.vo.TopicCommentInfoVO;
 import com.ytempest.vo.TopicDetailCommentVO;
 import com.ytempest.vo.TopicInfoVO;
@@ -34,6 +36,9 @@ public class TopicController {
 
     @Resource(name = "CommentInfoService")
     private CommentInfoService commentService;
+
+    @Resource(name = "ReplyInfoService")
+    private ReplyInfoService replyService;
 
     /**
      * 获取话题列表
@@ -93,7 +98,7 @@ public class TopicController {
     }
 
     /**
-     * 获取评论的详细信息
+     * 添加评论
      */
     @PostMapping("/addComment")
     public BaseResult addComment(
@@ -117,5 +122,29 @@ public class TopicController {
         return result;
     }
 
+
+    /**
+     * 添加回复
+     */
+    @PostMapping("/addReply")
+    public BaseResult addReply(
+            @RequestParam("commentId") Long commentId,
+            @RequestParam("content") String content,
+            @RequestParam("time") Long time,
+            @RequestParam("fromUser") Long fromUser,
+            @RequestParam("toUser") Long toUser) {
+        BaseResult result = ResultUtils.result();
+
+        ReplyInfoVO reply = new ReplyInfoVO(
+                null, commentId, content, new Date(time), fromUser, toUser);
+        try {
+            replyService.addReply(reply);
+            ResultUtils.setSuccess(result, "回复成功", ResultUtils.NullObj);
+        } catch (ServiceException e) {
+            ResultUtils.setError(result, "回复失败", ResultUtils.NullObj);
+        }
+
+        return result;
+    }
 
 }

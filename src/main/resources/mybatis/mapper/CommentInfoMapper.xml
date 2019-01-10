@@ -6,8 +6,8 @@
 
     <!-- 插入用户 -->
     <!-- 如果Sql的入参是一个类，那么要在#{}中写该类的属性名 -->
-    <insert id="insert" parameterType="com.ytempest.vo.CommentInfoVO"
-        useGeneratedKeys="true" keyProperty="commentId">
+    <insert id="insert" parameterType="com.ytempest.vo.CommentInfoVO" useGeneratedKeys="true"
+        keyProperty="commentId">
         INSERT INTO comments(
         comment_id, topic_id, comment_content, comment_time,
         comment_from_user, comment_to_user)
@@ -15,14 +15,4 @@
         #{commentFromUser},#{commentToUser});
     </insert>
 
-    <!-- 配置实体类和表的映射关系 -->
-    <!-- id：映射关系的Id；type：映射的实体类 -->
-    <!--  <resultMap id="CommentInfo_Mapping" type="com.ytempest.vo.CommentInfoVO">
-          <id property="commentId" column="commentId" />
-          <result property="topicId" column="topicId" />
-          <result property="commentContent" column="commentContent" />
-          <result property="commentTime" column="commentTime" />
-          <result property="commentFromUser" column="commentFromUser" />
-          <result property="commentToUser" column="commentToUser" />
-      </resultMap>-->
 </mapper>
