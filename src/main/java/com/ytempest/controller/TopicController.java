@@ -7,6 +7,7 @@ import com.ytempest.service.CommentInfoService;
 import com.ytempest.service.ReplyInfoService;
 import com.ytempest.service.TopicInfoService;
 import com.ytempest.vo.BaseResult;
+import com.ytempest.vo.BaseTopicInfoVO;
 import com.ytempest.vo.CommentInfoVO;
 import com.ytempest.vo.PageVO;
 import com.ytempest.vo.ReplyInfoVO;
@@ -17,14 +18,17 @@ import com.ytempest.vo.TopicInfoVO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/topic")
@@ -147,4 +151,26 @@ public class TopicController {
         return result;
     }
 
+    /**
+     * 添加话题
+     */
+    @RequestMapping(value = "/addTopic", method = RequestMethod.POST)
+    public BaseResult addTopic(HttpServletRequest request) {
+        BaseResult result = ResultUtils.result();
+        try {
+            BaseTopicInfoVO topic = new BaseTopicInfoVO();
+            topic.setTopicId(null);
+            topic.setUserId(Long.valueOf(request.getParameter("userId")));
+            topic.setTopicTitle(request.getParameter("topicTitle"));
+            topic.setTopicContent(request.getParameter("topicContent"));
+            topic.setTopicPublishTime(
+                    new Date(Long.valueOf(request.getParameter("publishTime"))));
+
+            topicService.addTopic(topic, request);
+            ResultUtils.setSuccess(result, "发布成功", ResultUtils.NullObj);
+        } catch (ServiceException e) {
+            ResultUtils.setError(result, "发布失败", ResultUtils.NullObj);
+        }
+        return result;
+    }
 }

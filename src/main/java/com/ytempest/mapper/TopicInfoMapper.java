@@ -1,5 +1,6 @@
 package com.ytempest.mapper;
 
+import com.ytempest.vo.BaseTopicInfoVO;
 import com.ytempest.vo.TopicCommentInfoVO;
 import com.ytempest.vo.TopicDetailCommentVO;
 import com.ytempest.vo.TopicInfoVO;
@@ -10,7 +11,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Service("TopicInfoMapper")
-public interface TopicInfoMapper extends MapperSupport<TopicInfoVO> {
+public interface TopicInfoMapper extends MapperSupport<BaseTopicInfoVO> {
+
+    List<TopicInfoVO> selectTopicList(int index, int len) throws SQLException;
+
     List<TopicCommentInfoVO> selectCommentListById(String id) throws SQLException;
 
     List<TopicDetailCommentVO> selectDetailComment(Integer topicId, Integer commentId,

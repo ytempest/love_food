@@ -4,7 +4,7 @@
 <mapper namespace="com.ytempest.mapper.TopicInfoMapper">
 
     <!-- 查找第index个记录之后的count个记录 -->
-    <select id="selectAll" resultMap="TopicInfo_List">
+    <select id="selectTopicList" resultMap="TopicInfo_List">
         SELECT * FROM
         (
         SELECT * FROM (
