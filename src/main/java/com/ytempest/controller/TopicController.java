@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -154,7 +155,7 @@ public class TopicController {
     /**
      * 添加话题
      */
-    @RequestMapping(value = "/addTopic", method = RequestMethod.POST)
+    @RequestMapping(value = "/addTopic")
     public BaseResult addTopic(HttpServletRequest request) {
         BaseResult result = ResultUtils.result();
         try {

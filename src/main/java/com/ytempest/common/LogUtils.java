@@ -6,7 +6,7 @@ package com.ytempest.common;
  */
 public class LogUtils {
 
-    public static void i(String tag, String msg) {
+    public static void d(String tag, String msg) {
         System.out.println(tag + ", " + msg);
     }
 

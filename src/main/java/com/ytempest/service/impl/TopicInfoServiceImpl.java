@@ -1,6 +1,8 @@
 package com.ytempest.service.impl;
 
+import com.ytempest.common.Configure;
 import com.ytempest.common.LogUtils;
+import com.ytempest.common.Utils;
 import com.ytempest.exception.ServiceException;
 import com.ytempest.mapper.TopicInfoMapper;
 import com.ytempest.service.TopicInfoService;
@@ -8,6 +10,7 @@ import com.ytempest.vo.BaseTopicInfoVO;
 import com.ytempest.vo.PageVO;
 import com.ytempest.vo.TopicCommentInfoVO;
 import com.ytempest.vo.TopicDetailCommentVO;
+import com.ytempest.vo.TopicImageVO;
 import com.ytempest.vo.TopicInfoVO;
 
 import org.springframework.stereotype.Service;
@@ -18,8 +21,12 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +38,13 @@ public class TopicInfoServiceImpl implements TopicInfoService {
 
     @Resource(name = "TopicInfoMapper")
     private TopicInfoMapper mapper;
+
+    public static void main(String[] arg) {
+        String filename = "1234.jpg";
+        String s = filename.substring(filename.lastIndexOf("."));
+        LogUtils.e(TAG, "main: " + s);
+
+    }
 
     @Override
     public PageVO<TopicInfoVO> getTopicList(int pageNum, int pageSize) throws ServiceException, SQLException {
@@ -73,11 +87,11 @@ public class TopicInfoServiceImpl implements TopicInfoService {
     @Override
     public void addTopic(BaseTopicInfoVO topic, HttpServletRequest request) throws ServiceException {
 
-        LogUtils.e(TAG, "addTopic: topic=" + topic);
-
         //将当前上下文初始化给  CommonsMutipartResolver （多部分解析器）
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
                 request.getSession().getServletContext());
+
+        List<TopicImageVO> imageList = new ArrayList<>();
 
         //检查form中是否有enctype="multipart/form-data".
         if (multipartResolver.isMultipart(request)) {
@@ -85,23 +99,13 @@ public class TopicInfoServiceImpl implements TopicInfoService {
             MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
             //获取multiRequest 中所有的文件名
             Iterator iterator = multiRequest.getFileNames();
-            int imageIdx = 0;
             while (iterator.hasNext()) {
-                imageIdx++;
                 //一次遍历所有文件
                 MultipartFile file = multiRequest.getFile(iterator.next().toString());
                 if (file != null) {
-                    String filename = file.getOriginalFilename();
-                    String newFileName = String.format("%s-%s.%s", imageIdx,
-                            topic.getTopicId(), filename.substring(filename.lastIndexOf(".") + 1));
-                    String imageDirPath = request.getSession().getServletContext().getRealPath("/topic");
-                    File imageDir = new File(imageDirPath);
-                    if (!imageDir.exists()) {
-                        imageDir.mkdir();
-                    }
-                    File image = new File(imageDir, newFileName);
-
-                    LogUtils.e(TAG, "addTopic: 第" + imageIdx + "张图片，名称：" + image);
+                    String imageName = file.getOriginalFilename();
+                    String newImageName = generateImageName(imageName);
+                    File image = new File(Utils.getTopicImageDir(request), newImageName);
 
                     //上传
                     try {
@@ -112,5 +116,9 @@ public class TopicInfoServiceImpl implements TopicInfoService {
                 }
             }
         }
+    }
+
+    private String generateImageName(String filename) {
+        return UUID.randomUUID() + filename.substring(filename.lastIndexOf("."));
     }
 }
