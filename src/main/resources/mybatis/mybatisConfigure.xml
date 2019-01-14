@@ -10,5 +10,7 @@
         <mapper resource="mybatis/mapper/TopicInfoMapper.xml" />
         <mapper resource="mybatis/mapper/CommentInfoMapper.xml" />
         <mapper resource="mybatis/mapper/ReplyInfoMapper.xml" />
+        <mapper resource="mybatis/mapper/TopicImageInfoMapper.xml" />
     </mappers>
+
 </configuration>

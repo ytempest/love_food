@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 动态代理开发规则： --><!-- 1、namespace必须是Dao接口的全路径名 --><!-- 2、接口的方法名必需与sql id 一致 --><!-- 3、接口的入参与parameterType类型一致 --><!-- 4、接口的返回值必须与resultType类型一致 -->
+
+<!-- 动态代理开发的好处：如果要扩展DAO的功能，只需要在接口中添加相应的功能，然后在Mapper映射文件中添加相应的Sql语句就可以实现扩展 -->
+<mapper namespace="com.ytempest.mapper.TopicImageInfoMapper">
+    <insert id="insertList" parameterType="java.util.List">
+        insert into topic_images(image_id,topic_id,image_url) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.imageId},#{item.topicId},#{item.imageUrl})
+        </foreach>
+    </insert>
+
+</mapper>

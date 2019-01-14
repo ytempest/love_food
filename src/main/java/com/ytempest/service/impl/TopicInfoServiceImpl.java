@@ -4,6 +4,7 @@ import com.ytempest.common.Configure;
 import com.ytempest.common.LogUtils;
 import com.ytempest.common.Utils;
 import com.ytempest.exception.ServiceException;
+import com.ytempest.mapper.TopicImageInfoMapper;
 import com.ytempest.mapper.TopicInfoMapper;
 import com.ytempest.service.TopicInfoService;
 import com.ytempest.vo.BaseTopicInfoVO;
@@ -14,6 +15,9 @@ import com.ytempest.vo.TopicImageVO;
 import com.ytempest.vo.TopicInfoVO;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -21,9 +25,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -37,7 +39,10 @@ public class TopicInfoServiceImpl implements TopicInfoService {
     private static final String TAG = "TopicInfoServiceImpl";
 
     @Resource(name = "TopicInfoMapper")
-    private TopicInfoMapper mapper;
+    private TopicInfoMapper topicMapper;
+
+    @Resource(name = "TopicImageInfoMapper")
+    private TopicImageInfoMapper imageMapper;
 
     public static void main(String[] arg) {
         String filename = "1234.jpg";
@@ -50,7 +55,7 @@ public class TopicInfoServiceImpl implements TopicInfoService {
     public PageVO<TopicInfoVO> getTopicList(int pageNum, int pageSize) throws ServiceException, SQLException {
         // 3、获取PageVO数据模型所需要的相关参数
         // 获取用户的记录总数
-        long total = mapper.countAll();
+        long total = topicMapper.countAll();
         // 计算总页面数
         int pageCount = (int) (total % pageSize == 0
                 ? total / pageSize
@@ -67,7 +72,7 @@ public class TopicInfoServiceImpl implements TopicInfoService {
         // 4、封装PageVO数据
         PageVO<TopicInfoVO> pageVO = new PageVO<TopicInfoVO>(total, pageSize, pageNum,
                 pageCount);
-        pageVO.setList(mapper.selectTopicList((pageNum - 1) * pageSize, pageSize));
+        pageVO.setList(topicMapper.selectTopicList((pageNum - 1) * pageSize, pageSize));
 
         return pageVO;
     }
@@ -75,13 +80,13 @@ public class TopicInfoServiceImpl implements TopicInfoService {
 
     @Override
     public List<TopicCommentInfoVO> getCommentListById(long topicId) throws Exception {
-        return mapper.selectCommentListById(String.valueOf(topicId));
+        return topicMapper.selectCommentListById(String.valueOf(topicId));
     }
 
     @Override
     public List<TopicDetailCommentVO> getCommentInfo(Integer topicId, Integer commentId,
                                                      Integer replyToUser) throws Exception {
-        return mapper.selectDetailComment(topicId, commentId, replyToUser);
+        return topicMapper.selectDetailComment(topicId, commentId, replyToUser);
     }
 
     @Override
@@ -91,7 +96,12 @@ public class TopicInfoServiceImpl implements TopicInfoService {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
                 request.getSession().getServletContext());
 
-        List<TopicImageVO> imageList = new ArrayList<>();
+        try {
+            topicMapper.insert(topic);
+            LogUtils.e(TAG, "addTopic: topicId=" + topic.getTopicId());
+        } catch (SQLException e) {
+            throw new ServiceException("插入失败");
+        }
 
         //检查form中是否有enctype="multipart/form-data".
         if (multipartResolver.isMultipart(request)) {
@@ -99,6 +109,8 @@ public class TopicInfoServiceImpl implements TopicInfoService {
             MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
             //获取multiRequest 中所有的文件名
             Iterator iterator = multiRequest.getFileNames();
+
+            List<TopicImageVO> imageList = new ArrayList<>();
             while (iterator.hasNext()) {
                 //一次遍历所有文件
                 MultipartFile file = multiRequest.getFile(iterator.next().toString());
@@ -110,13 +122,25 @@ public class TopicInfoServiceImpl implements TopicInfoService {
                     //上传
                     try {
                         file.transferTo(image);
+                        TopicImageVO imageVO = new TopicImageVO();
+                        imageVO.setImageId(null);
+                        imageVO.setTopicId(topic.getTopicId());
+                        imageVO.setImageUrl(String.format("/%s/%s", Configure.TOPIC_IMAGE_DIR, newImageName));
+                        imageList.add(imageVO);
                     } catch (IOException e) {
                         throw new ServiceException("获取上传图片失败");
                     }
                 }
             }
+
+            try {
+                imageMapper.insertList(imageList);
+            } catch (SQLException e) {
+                throw new ServiceException("插入失败");
+            }
         }
     }
+
 
     private String generateImageName(String filename) {
         return UUID.randomUUID() + filename.substring(filename.lastIndexOf("."));

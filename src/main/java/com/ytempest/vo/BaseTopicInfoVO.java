@@ -65,6 +65,8 @@ public class BaseTopicInfoVO {
         this.topicPublishTime = topicPublishTime;
     }
 
+
+
     @Override
     public String toString() {
         return "BaseTopicInfoVO{" +
