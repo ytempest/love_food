@@ -11,6 +11,9 @@ public class ServiceException extends Exception {
     // 页码数已经超出话题列表的结尾
     public static final int TOPIC_LIST_END = 3;
 
+    // 页码数已经超出菜谱列表的结尾
+    public static final int COOK_LIST_END = 4;
+
 
     private int errorCode;
 

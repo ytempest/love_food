@@ -15,9 +15,6 @@ import com.ytempest.vo.TopicImageVO;
 import com.ytempest.vo.TopicInfoVO;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -53,7 +50,6 @@ public class TopicInfoServiceImpl implements TopicInfoService {
 
     @Override
     public PageVO<TopicInfoVO> getTopicList(int pageNum, int pageSize) throws ServiceException, SQLException {
-        // 3、获取PageVO数据模型所需要的相关参数
         // 获取用户的记录总数
         long total = topicMapper.countAll();
         // 计算总页面数

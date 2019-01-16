@@ -1,10 +1,8 @@
 package com.ytempest.mapper;
 
-import java.util.List;
+import com.ytempest.vo.AdminInfoVO;
 
 import org.springframework.stereotype.Service;
-
-import com.ytempest.vo.AdminInfoVO;
 
 @Service("AdminInfoMapper")
 public interface AdminInfoMapper {

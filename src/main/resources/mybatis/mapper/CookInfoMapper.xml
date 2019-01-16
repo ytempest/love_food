@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytempest.mapper.CookInfoMapper">
+
+    <!-- 查找第index个记录之后的count个记录 -->
+    <select id="selectCookList" resultMap="Cook_List">
+        SELECT * FROM cookbook
+        WHERE cook_group=#{arg0} AND cook_type=#{arg1} LIMIT #{arg2},#{arg3}
+	</select>
+
+    <select id="countCookList" resultType="Long">
+		SELECT COUNT(*) FROM cookbook
+		WHERE cook_group=#{arg0} AND cook_type=#{arg1};
+	</select>
+
+    <select id="selectCook" resultMap="Cook_Info">
+        SELECT * FROM
+        (SELECT c.*, u.user_head_url, u.user_account FROM cookbook c
+        INNER JOIN user_info u
+        ON c.cook_id=#{arg0} AND c.cook_user_id=u.user_id) t
+        INNER JOIN
+        (SELECT COUNT(*) AS coolection_count FROM collection WHERE cook_id=#{arg0}) z
+
+        LEFT JOIN mainmaterials m
+        ON t.cook_id=m.cook_id
+
+        LEFT JOIN accessories a
+        ON t.cook_id=a.cook_id
+
+        LEFT JOIN procedures p
+        ON t.cook_id=p.cook_id
+	</select>
+
+    <resultMap id="Cook_List" type="com.ytempest.vo.CookBaseInfoVO">
+        <id property="cookId" column="cook_id" />
+        <result property="cookGroup" column="cook_group" />
+        <result property="cookType" column="cook_type" />
+        <result property="cookImageUrl" column="cook_image_url" />
+        <result property="cookUserId" column="cook_user_id" />
+        <result property="cookTitle" column="cook_title" />
+        <result property="cookDesc" column="cook_desc" />
+        <result property="cookPublishTime" column="cook_publish_time" />
+    </resultMap>
+
+    <resultMap id="Cook_Info" type="com.ytempest.vo.CookDetailInfoVO">
+        <id property="cookId" column="cook_id" />
+        <result property="cookGroup" column="cook_group" />
+        <result property="cookType" column="cook_type" />
+        <result property="cookImageUrl" column="cook_image_url" />
+        <result property="cookUserId" column="cook_user_id" />
+        <result property="cookTitle" column="cook_title" />
+        <result property="cookDesc" column="cook_desc" />
+        <result property="cookPublishTime" column="cook_publish_time" />
+
+        <result property="userHeadUrl" column="user_head_url" />
+        <result property="userAccount" column="user_account" />
+        <result property="collectCount" column="collect_count" />
+
+        <collection property="mainList" ofType="com.ytempest.vo.MainmaterialsVO">
+            <result property="mainName" column="main_name" />
+            <result property="mainAmount" column="main_amount" />
+        </collection>
+
+        <collection property="accList" ofType="com.ytempest.vo.AccessoriesVO">
+            <result property="accName" column="acc_name" />
+            <result property="accAmount" column="acc_amount" />
+        </collection>
+
+        <collection property="proceList" ofType="com.ytempest.vo.ProceduresVO">
+            <result property="proceNo" column="proce_no" />
+            <result property="proceImageUrl" column="proce_image_url" />
+            <result property="proceDesc" column="proce_desc" />
+        </collection>
+    </resultMap>
+</mapper>

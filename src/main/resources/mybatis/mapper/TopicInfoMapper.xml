@@ -27,9 +27,7 @@
         LEFT JOIN topic_images
         ON t2.topic_id = topic_images.topic_id
 	</select>
-    <!--SELECT * FROM (SELECT * FROM topics LIMIT #{arg0},#{arg1}) t
-    LEFT JOIN topic_images
-    ON t.topic_id = topic_images.topic_id-->
+
     <select id="countAll" resultType="Long">
 		SELECT count(*) FROM topics;
 	</select>

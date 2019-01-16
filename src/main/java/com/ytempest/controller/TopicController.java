@@ -61,9 +61,11 @@ public class TopicController {
         } catch (ServiceException e) {
             if (e.getErrorCode() == ServiceException.TOPIC_LIST_END) {
                 ResultUtils.setError(result, "已经到底", ResultUtils.NullList);
+            } else {
+                ResultUtils.setError(result, "获取失败", ResultUtils.NullList);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            ResultUtils.setError(result, "获取失败", ResultUtils.NullList);
         }
         return result;
     }

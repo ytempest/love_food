@@ -11,6 +11,9 @@
         <mapper resource="mybatis/mapper/CommentInfoMapper.xml" />
         <mapper resource="mybatis/mapper/ReplyInfoMapper.xml" />
         <mapper resource="mybatis/mapper/TopicImageInfoMapper.xml" />
+
+        <mapper resource="mybatis/mapper/CookInfoMapper.xml" />
+
     </mappers>
 
 </configuration>
