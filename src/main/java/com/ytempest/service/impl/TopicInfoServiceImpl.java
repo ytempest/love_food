@@ -1,8 +1,8 @@
 package com.ytempest.service.impl;
 
-import com.ytempest.common.Configure;
-import com.ytempest.common.LogUtils;
-import com.ytempest.common.Utils;
+import com.ytempest.util.LogUtils;
+import com.ytempest.util.FileUtils;
+import com.ytempest.util.Utils;
 import com.ytempest.exception.ServiceException;
 import com.ytempest.mapper.TopicImageInfoMapper;
 import com.ytempest.mapper.TopicInfoMapper;
@@ -17,7 +17,6 @@ import com.ytempest.vo.TopicInfoVO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +24,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -87,20 +85,14 @@ public class TopicInfoServiceImpl implements TopicInfoService {
 
     @Override
     public void addTopic(BaseTopicInfoVO topic, HttpServletRequest request) throws ServiceException {
-
-        //将当前上下文初始化给  CommonsMutipartResolver （多部分解析器）
-        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
-                request.getSession().getServletContext());
-
         try {
             topicMapper.insert(topic);
-            LogUtils.e(TAG, "addTopic: topicId=" + topic.getTopicId());
         } catch (SQLException e) {
             throw new ServiceException("插入失败");
         }
 
         //检查form中是否有enctype="multipart/form-data".
-        if (multipartResolver.isMultipart(request)) {
+        if (Utils.isHaveMultipart(request)) {
             //将request变成多部分request
             MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
             //获取multiRequest 中所有的文件名
@@ -112,8 +104,8 @@ public class TopicInfoServiceImpl implements TopicInfoService {
                 MultipartFile file = multiRequest.getFile(iterator.next().toString());
                 if (file != null) {
                     String imageName = file.getOriginalFilename();
-                    String newImageName = generateImageName(imageName);
-                    File image = new File(Utils.getTopicImageDir(request), newImageName);
+                    String newImageName = FileUtils.generateImageName(imageName);
+                    File image = new File(FileUtils.getTopicImageDir(), newImageName);
 
                     //上传
                     try {
@@ -121,7 +113,7 @@ public class TopicInfoServiceImpl implements TopicInfoService {
                         TopicImageVO imageVO = new TopicImageVO();
                         imageVO.setImageId(null);
                         imageVO.setTopicId(topic.getTopicId());
-                        imageVO.setImageUrl(String.format("/%s/%s", Configure.TOPIC_IMAGE_DIR, newImageName));
+                        imageVO.setImageUrl(FileUtils.generateTopicImageUrl(newImageName));
                         imageList.add(imageVO);
                     } catch (IOException e) {
                         throw new ServiceException("获取上传图片失败");
@@ -135,10 +127,5 @@ public class TopicInfoServiceImpl implements TopicInfoService {
                 throw new ServiceException("插入失败");
             }
         }
-    }
-
-
-    private String generateImageName(String filename) {
-        return UUID.randomUUID() + filename.substring(filename.lastIndexOf("."));
     }
 }

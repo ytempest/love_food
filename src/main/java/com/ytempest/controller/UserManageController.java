@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ytempest.common.SecurityUtils;
+import com.ytempest.util.SecurityUtils;
 import com.ytempest.service.UserInfoService;
 import com.ytempest.vo.PageVO;
 import com.ytempest.vo.UserInfoVO;

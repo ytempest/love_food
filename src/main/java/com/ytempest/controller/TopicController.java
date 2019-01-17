@@ -1,7 +1,7 @@
 package com.ytempest.controller;
 
-import com.ytempest.common.LogUtils;
-import com.ytempest.common.ResultUtils;
+import com.ytempest.util.LogUtils;
+import com.ytempest.util.ResultUtils;
 import com.ytempest.exception.ServiceException;
 import com.ytempest.service.CommentInfoService;
 import com.ytempest.service.ReplyInfoService;
@@ -18,13 +18,10 @@ import com.ytempest.vo.TopicInfoVO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 

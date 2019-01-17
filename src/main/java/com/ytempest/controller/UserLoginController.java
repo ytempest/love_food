@@ -1,8 +1,7 @@
 package com.ytempest.controller;
 
-import com.ytempest.common.LogUtils;
-import com.ytempest.common.ResultUtils;
-import com.ytempest.common.Utils;
+import com.ytempest.util.LogUtils;
+import com.ytempest.util.ResultUtils;
 import com.ytempest.exception.ServiceException;
 import com.ytempest.service.UserInfoService;
 import com.ytempest.vo.BaseResult;
@@ -77,7 +76,7 @@ public class UserLoginController {
 
         BaseResult result = ResultUtils.result();
         try {
-            UserInfoVO userInfo = Utils.baseUserInfo();
+            UserInfoVO userInfo = UserInfoVO.baseUserInfo();
             userInfo.setUserAccount(account);
             userInfo.setUserPwd(pwd);
             userInfo.setUserPhone(phone);

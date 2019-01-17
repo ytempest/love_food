@@ -1,4 +1,4 @@
-package com.ytempest.common;
+package com.ytempest.util;
 
 /**
  * @author ytempest

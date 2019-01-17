@@ -1,4 +1,4 @@
-package com.ytempest.common;
+package com.ytempest.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ytempest.vo.BaseResult;

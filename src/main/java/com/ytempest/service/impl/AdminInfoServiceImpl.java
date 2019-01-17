@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.ytempest.common.SecurityUtils;
+import com.ytempest.util.SecurityUtils;
 import com.ytempest.exception.ServiceException;
 import com.ytempest.mapper.AdminInfoMapper;
 import com.ytempest.service.AdminInfoService;

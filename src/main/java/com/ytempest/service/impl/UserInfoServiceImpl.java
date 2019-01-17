@@ -7,8 +7,8 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.ytempest.common.LogUtils;
-import com.ytempest.common.SecurityUtils;
+import com.ytempest.util.LogUtils;
+import com.ytempest.util.SecurityUtils;
 import com.ytempest.exception.ServiceException;
 import com.ytempest.mapper.UserInfoMapper;
 import com.ytempest.service.UserInfoService;
