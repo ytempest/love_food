@@ -5,7 +5,10 @@ import com.ytempest.vo.CookBaseInfoVO;
 import com.ytempest.vo.CookDetailInfoVO;
 import com.ytempest.vo.PageVO;
 
+import java.io.IOException;
 import java.sql.SQLException;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author ytempest
@@ -16,4 +19,6 @@ public interface CookInfoService {
                                        Integer pageNum, Integer pageSize) throws ServiceException, SQLException;
 
     CookDetailInfoVO getCookInfo(Long cookId) throws ServiceException;
+
+    void addCook(HttpServletRequest request) throws IOException, ServiceException;
 }

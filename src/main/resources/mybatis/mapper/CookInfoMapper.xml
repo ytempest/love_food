@@ -32,6 +32,15 @@
         ON t.cook_id=p.cook_id
 	</select>
 
+    <insert id="insert" parameterType="com.ytempest.vo.CookBaseInfoVO" useGeneratedKeys="true"
+        keyProperty="cookId">
+        INSERT INTO cookbook(cook_id, cook_group, cook_type, cook_image_url,
+         cook_user_id, cook_title, cook_desc, cook_publish_time)
+        VALUES (#{cookId}, #{cookGroup}, #{cookType}, #{cookImageUrl},
+         #{cookUserId}, #{cookTitle}, #{cookDesc}, #{cookPublishTime});
+    </insert>
+
+
     <resultMap id="Cook_List" type="com.ytempest.vo.CookBaseInfoVO">
         <id property="cookId" column="cook_id" />
         <result property="cookGroup" column="cook_group" />

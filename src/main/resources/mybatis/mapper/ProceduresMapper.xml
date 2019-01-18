@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytempest.mapper.ProceduresMapper">
+    <insert id="insertList" parameterType="java.util.List" >
+        INSERT INTO procedures(
+        proce_id, cook_id, proce_no, proce_image_url, proce_desc)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.proceId}, #{item.cookId}, #{item.proceNo}, #{item.proceImageUrl}, #{item.proceDesc})
+        </foreach>
+    </insert>
+</mapper>

@@ -13,7 +13,9 @@
         <mapper resource="mybatis/mapper/TopicImageInfoMapper.xml" />
 
         <mapper resource="mybatis/mapper/CookInfoMapper.xml" />
-
+        <mapper resource="mybatis/mapper/MainmaterialsMapper.xml" />
+        <mapper resource="mybatis/mapper/AccessoriesMapper.xml" />
+        <mapper resource="mybatis/mapper/ProceduresMapper.xml" />
     </mappers>
 
 </configuration>
