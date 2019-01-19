@@ -2,6 +2,7 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ytempest.mapper.ProceduresMapper">
+
     <insert id="insertList" parameterType="java.util.List" >
         INSERT INTO procedures(
         proce_id, cook_id, proce_no, proce_image_url, proce_desc)
@@ -10,4 +11,9 @@
             (#{item.proceId}, #{item.cookId}, #{item.proceNo}, #{item.proceImageUrl}, #{item.proceDesc})
         </foreach>
     </insert>
+
+    <delete id="delete" parameterType="Long">
+        DELETE FROM procedures WHERE cook_id =#{arg0}
+    </delete>
+
 </mapper>

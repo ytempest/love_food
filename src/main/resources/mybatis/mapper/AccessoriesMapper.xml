@@ -10,4 +10,8 @@
             (#{item.accId}, #{item.cookId}, #{item.accName}, #{item.accAmount})
         </foreach>
     </insert>
+
+    <delete id="delete" parameterType="Long">
+        DELETE FROM accessories WHERE cook_id =#{arg0}
+    </delete>
 </mapper>

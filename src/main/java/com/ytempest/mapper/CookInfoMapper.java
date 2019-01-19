@@ -20,5 +20,7 @@ public interface CookInfoMapper extends MapperSupport<CookBaseInfoVO> {
 
     long countCookList(String cookGroup, String cookType) throws SQLException;
 
-    CookDetailInfoVO selectCook(Long cookId)throws SQLException;
+    CookDetailInfoVO selectCook(Long cookId) throws SQLException;
+
+    void deleteCook(Long cookId) throws SQLException;
 }

@@ -20,5 +20,9 @@ public interface CookInfoService {
 
     CookDetailInfoVO getCookInfo(Long cookId) throws ServiceException;
 
-    void addCook(HttpServletRequest request) throws IOException, ServiceException;
+    void addCook(HttpServletRequest request) throws ServiceException;
+
+    void deleteCook(Long cookId) throws ServiceException;
+
+    void updateCook(HttpServletRequest request) throws ServiceException;
 }

@@ -13,5 +13,9 @@ import java.util.List;
  */
 @Service("ProceduresMapper")
 public interface ProceduresMapper extends MapperSupport<ProceduresVO> {
+
     void insertList(List<ProceduresVO> procedures) throws SQLException;
+
+    void delete(Long cookId) throws SQLException;
+
 }

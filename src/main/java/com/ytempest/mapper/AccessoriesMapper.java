@@ -13,5 +13,9 @@ import java.util.List;
  */
 @Service("AccessoriesMapper")
 public interface AccessoriesMapper extends MapperSupport<AccessoriesVO> {
+
     void insertList(List<AccessoriesVO> accessories) throws SQLException;
+
+    void delete(Long cookId) throws SQLException;
+
 }

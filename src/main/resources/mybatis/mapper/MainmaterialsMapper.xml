@@ -2,6 +2,7 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ytempest.mapper.MainmaterialsMapper">
+
     <insert id="insertList" parameterType="java.util.List" >
         INSERT INTO mainmaterials(main_id, cook_id, main_name, main_amount)
         VALUES
@@ -9,4 +10,8 @@
             (#{item.mainId}, #{item.cookId}, #{item.mainName}, #{item.mainAmount})
         </foreach>
     </insert>
+
+    <delete id="delete" parameterType="Long">
+        DELETE FROM mainmaterials WHERE cook_id =#{arg0}
+    </delete>
 </mapper>

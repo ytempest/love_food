@@ -96,20 +96,37 @@ public class CookInfoServiceImpl implements CookInfoService {
             CookBaseInfoVO cookInfo = obtainCook(request);
             cookMapper.insert(cookInfo);
 
-            mainMapper.insertList(
-                    obtainMainmaterials(request, cookInfo.getCookId()));
+            List<MainmaterialsVO> mainList = obtainMainmaterials(request, cookInfo.getCookId());
+            List<AccessoriesVO> accList = obtainAccessories(request, cookInfo.getCookId());
+            List<ProceduresVO> proList = obtainProcedures(request, cookInfo.getCookId());
 
-            accMapper.insertList(
-                    obtainAccessories(request, cookInfo.getCookId()));
-
-            proceMapper.insertList(
-                    obtainProcedures(request, cookInfo.getCookId()));
-
-        } catch (ServiceException e) {
-            throw new ServiceException(e.getMessage());
+            mainMapper.insertList(mainList);
+            accMapper.insertList(accList);
+            proceMapper.insertList(proList);
         } catch (SQLException e) {
             throw new ServiceException("插入失败");
         }
+    }
+
+    @Override
+    public void deleteCook(Long cookId) throws ServiceException {
+        if (cookId != null) {
+            try {
+                mainMapper.delete(cookId);
+                accMapper.delete(cookId);
+                proceMapper.delete(cookId);
+                cookMapper.deleteCook(cookId);
+            } catch (SQLException e) {
+                throw new ServiceException("删除失败");
+            }
+        } else {
+            throw new ServiceException("菜谱Id不能为空");
+        }
+    }
+
+    @Override
+    public void updateCook(HttpServletRequest request) throws ServiceException {
+
     }
 
     private List<MainmaterialsVO> obtainMainmaterials(HttpServletRequest request, long cookId) {
@@ -185,12 +202,18 @@ public class CookInfoServiceImpl implements CookInfoService {
                         vo.setProceDesc(proceDesc);
                         vo.setProceImageUrl(FileUtils.generateCookProcedureImageUrl(newImageName));
                         list.add(vo);
-                    } else {
+
+                    } else if (proceImage == null &&
+                            TextUtils.isEmpty(proceNo) && TextUtils.isEmpty(proceDesc)) {
                         break;
+                    } else {
+                        throw new ServiceException("步骤的参数(proceNo、proceDesc、proceImage)不能为空");
                     }
                 }
             }
-        } catch (IOException e) {
+        } catch (
+                IOException e) {
+            LogUtils.e(TAG, "obtainProcedures: " + e.getCause());
             throw new ServiceException("无法获取上传的菜谱成品图片");
         }
         return list;
@@ -199,7 +222,7 @@ public class CookInfoServiceImpl implements CookInfoService {
     private CookBaseInfoVO obtainCook(HttpServletRequest request) throws ServiceException {
         CookBaseInfoVO vo = new CookBaseInfoVO();
         try {
-            vo.setCookId(null);
+            vo.setCookId(NumberUtils.parseLong(request.getParameter("cookId")));
             vo.setCookGroup(request.getParameter("cookGroup"));
             vo.setCookType(request.getParameter("cookType"));
             vo.setCookUserId(NumberUtils.parseLong(request.getParameter("cookUserId")));
@@ -221,6 +244,9 @@ public class CookInfoServiceImpl implements CookInfoService {
                     //上传
                     file.transferTo(image);
                     vo.setCookImageUrl(FileUtils.generateCookImageUrl(newImageName));
+                } else {
+                    LogUtils.e(TAG, "obtainCook: 无法获取菜谱的成品图片");
+                    throw new ServiceException("无法获取菜谱的成品图片");
                 }
             }
         } catch (IOException e) {

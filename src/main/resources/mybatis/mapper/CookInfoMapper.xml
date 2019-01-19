@@ -40,6 +40,9 @@
          #{cookUserId}, #{cookTitle}, #{cookDesc}, #{cookPublishTime});
     </insert>
 
+    <delete id="deleteCook" parameterType="Long">
+        DELETE FROM cookbook WHERE cook_id = #{arg0}
+    </delete>
 
     <resultMap id="Cook_List" type="com.ytempest.vo.CookBaseInfoVO">
         <id property="cookId" column="cook_id" />

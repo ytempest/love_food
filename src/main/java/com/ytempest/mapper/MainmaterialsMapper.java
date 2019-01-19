@@ -13,5 +13,8 @@ import java.util.List;
  */
 @Service("MainmaterialsMapper")
 public interface MainmaterialsMapper extends MapperSupport<MainmaterialsVO> {
+
     void insertList(List<MainmaterialsVO> mainmaterials) throws SQLException;
+
+    void delete(Long cookId) throws SQLException;
 }

@@ -7,10 +7,18 @@ package com.ytempest.util;
 public class NumberUtils {
 
     public static Integer parseInteger(String val) {
-        return Integer.parseInt(val);
+        Integer num = null;
+        if (!TextUtils.isEmpty(val)) {
+            num = Integer.parseInt(val);
+        }
+        return num;
     }
 
     public static Long parseLong(String val) {
-        return Long.parseLong(val);
+        Long num = null;
+        if (!TextUtils.isEmpty(val)) {
+            num = Long.parseLong(val);
+        }
+        return num;
     }
 }
