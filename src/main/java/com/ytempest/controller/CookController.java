@@ -43,15 +43,12 @@ public class CookController {
             PageVO<CookBaseInfoVO> cookList = service.getCookList(cookGroup, cookType, pageNum, pageSize);
             ResultUtils.setSuccess(result, "获取成功", cookList);
         } catch (ServiceException e) {
-            if (e.getErrorCode() == ServiceException.TOPIC_LIST_END) {
+            if (e.getErrorCode() == ServiceException.COOK_LIST_END) {
                 ResultUtils.setError(result, "已经到底", ResultUtils.NullList);
             } else {
-                ResultUtils.setError(result, "获取失败", ResultUtils.NullList);
+                ResultUtils.setError(result, e.getMessage(), ResultUtils.NullList);
             }
-        } catch (SQLException e) {
-            ResultUtils.setError(result, "获取失败", ResultUtils.NullList);
         }
-
         return result;
     }
 

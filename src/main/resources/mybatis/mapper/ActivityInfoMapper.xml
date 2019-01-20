@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytempest.mapper.ActivityInfoMapper">
+
+    <select id="countAll" resultType="Long">
+		SELECT count(*) FROM activity;
+	</select>
+
+    <select id="selectList" resultMap="Activity_Base_Info">
+        SELECT * FROM activity LIMIT #{arg0},#{arg1}
+	</select>
+
+    <select id="selectDetailInfo" resultMap="Activity_Detail_Info">
+        SELECT * FROM activity
+        INNER JOIN prizes
+        ON act_id=#{arg0}
+        INNER JOIN (
+        SELECT COUNT(*) AS partake_count FROM partakes_activity WHERE act_id=#{arg0}) p
+    </select>
+
+    <resultMap id="Activity_Base_Info" type="com.ytempest.vo.ActivityInfoVO">
+        <id property="actId" column="act_id" />
+        <result property="actImageUrl" column="act_image_url" />
+        <result property="actTitle" column="act_title" />
+        <result property="actDesc" column="act_desc" />
+        <result property="actStartTime" column="act_start_time" />
+        <result property="actFinishTime" column="act_finish_time" />
+        <result property="actRequest" column="act_request" />
+    </resultMap>
+
+    <resultMap id="Activity_Detail_Info" type="com.ytempest.vo.ActivityDetailVO">
+        <id property="actId" column="act_id" />
+        <result property="actImageUrl" column="act_image_url" />
+        <result property="actTitle" column="act_title" />
+        <result property="actDesc" column="act_desc" />
+        <result property="actStartTime" column="act_start_time" />
+        <result property="actFinishTime" column="act_finish_time" />
+        <result property="actRequest" column="act_request" />
+
+        <result property="partakeCount" column="partake_count" />
+
+        <collection property="prizeList" ofType="com.ytempest.vo.PrizeVO">
+            <result property="prizeId" column="prize_id" />
+            <result property="prizeName" column="prize_name" />
+            <result property="prizePrize" column="prize_prize" />
+        </collection>
+
+
+    </resultMap>
+
+
+</mapper>

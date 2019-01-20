@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface CookInfoService {
     PageVO<CookBaseInfoVO> getCookList(String cookGroup, String cookType,
-                                       Integer pageNum, Integer pageSize) throws ServiceException, SQLException;
+                                       Integer pageNum, Integer pageSize) throws ServiceException;
 
     CookDetailInfoVO getCookInfo(Long cookId) throws ServiceException;
 

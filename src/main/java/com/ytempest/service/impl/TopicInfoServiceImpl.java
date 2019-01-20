@@ -1,12 +1,12 @@
 package com.ytempest.service.impl;
 
-import com.ytempest.util.LogUtils;
-import com.ytempest.util.FileUtils;
-import com.ytempest.util.Utils;
 import com.ytempest.exception.ServiceException;
 import com.ytempest.mapper.TopicImageInfoMapper;
 import com.ytempest.mapper.TopicInfoMapper;
 import com.ytempest.service.TopicInfoService;
+import com.ytempest.util.FileUtils;
+import com.ytempest.util.LogUtils;
+import com.ytempest.util.Utils;
 import com.ytempest.vo.BaseTopicInfoVO;
 import com.ytempest.vo.PageVO;
 import com.ytempest.vo.TopicCommentInfoVO;
@@ -47,28 +47,32 @@ public class TopicInfoServiceImpl implements TopicInfoService {
     }
 
     @Override
-    public PageVO<TopicInfoVO> getTopicList(int pageNum, int pageSize) throws ServiceException, SQLException {
-        // 获取用户的记录总数
-        long total = topicMapper.countAll();
-        // 计算总页面数
-        int pageCount = (int) (total % pageSize == 0
-                ? total / pageSize
-                : total / pageSize + 1);
-        // 判断输入的页码是否超过数据的页码范围
-        if (pageNum < 1) {
-            throw new IllegalArgumentException(
-                    "page number is out of page count");
-        }
-        if (pageNum > pageCount) {
-            throw new ServiceException(ServiceException.TOPIC_LIST_END, "已经到底");
-        }
+    public PageVO<TopicInfoVO> getTopicList(int pageNum, int pageSize) throws ServiceException {
+        try {
+            // 获取用户的记录总数
+            long total = topicMapper.countAll();
+            // 计算总页面数
+            int pageCount = (int) (total % pageSize == 0
+                    ? total / pageSize
+                    : total / pageSize + 1);
+            // 判断输入的页码是否超过数据的页码范围
+            if (pageNum < 1) {
+                throw new ServiceException("页码数必须要大于等于1");
+            }
+            if (pageNum > pageCount) {
+                throw new ServiceException(ServiceException.TOPIC_LIST_END, "已经到底");
+            }
 
-        // 4、封装PageVO数据
-        PageVO<TopicInfoVO> pageVO = new PageVO<TopicInfoVO>(total, pageSize, pageNum,
-                pageCount);
-        pageVO.setList(topicMapper.selectTopicList((pageNum - 1) * pageSize, pageSize));
+            // 4、封装PageVO数据
+            PageVO<TopicInfoVO> pageVO = new PageVO<TopicInfoVO>(total, pageSize, pageNum,
+                    pageCount);
+            pageVO.setList(topicMapper.selectTopicList((pageNum - 1) * pageSize, pageSize));
 
-        return pageVO;
+            return pageVO;
+
+        } catch (SQLException e) {
+            throw new ServiceException("获取失败");
+        }
     }
 
 

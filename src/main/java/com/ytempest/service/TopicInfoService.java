@@ -21,7 +21,7 @@ public interface TopicInfoService {
      * 搜索从第pageNum页开始的数据
      */
     PageVO<TopicInfoVO> getTopicList(int pageNum, int pageSize)
-            throws ServiceException, SQLException;
+            throws ServiceException;
 
     /**
      * 添加话题

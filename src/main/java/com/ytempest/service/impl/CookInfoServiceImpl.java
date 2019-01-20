@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -58,29 +57,32 @@ public class CookInfoServiceImpl implements CookInfoService {
 
     @Override
     public PageVO<CookBaseInfoVO> getCookList(String cookGroup, String cookType,
-                                              Integer pageNum, Integer pageSize) throws ServiceException, SQLException {
-        // 获取用户的记录总数
-        long total = cookMapper.countCookList(cookGroup, cookType);
-        // 计算总页面数
-        int pageCount = (int) (total % pageSize == 0
-                ? total / pageSize
-                : total / pageSize + 1);
-        // 判断输入的页码是否超过数据的页码范围
-        if (pageNum < 1) {
-            throw new IllegalArgumentException(
-                    "page number is out of page count");
-        }
-        if (pageNum > pageCount) {
-            throw new ServiceException(ServiceException.COOK_LIST_END, "已经到底");
-        }
+                                              Integer pageNum, Integer pageSize) throws ServiceException {
+        try {
+            // 获取用户的记录总数
+            long total = cookMapper.countCookList(cookGroup, cookType);
+            // 计算总页面数
+            int pageCount = (int) (total % pageSize == 0
+                    ? total / pageSize
+                    : total / pageSize + 1);
+            // 判断输入的页码是否超过数据的页码范围
+            if (pageNum < 1) {
+                throw new ServiceException("页码数必须要大于等于1");
+            }
+            if (pageNum > pageCount) {
+                throw new ServiceException(ServiceException.COOK_LIST_END, "已经到底");
+            }
 
-        // 4、封装PageVO数据
-        PageVO<CookBaseInfoVO> pageVO = new PageVO<>(total, pageSize, pageNum,
-                pageCount);
-        pageVO.setList(cookMapper.selectCookList(cookGroup, cookType,
-                (pageNum - 1) * pageSize, pageSize));
+            // 4、封装PageVO数据
+            PageVO<CookBaseInfoVO> pageVO = new PageVO<>(total, pageSize, pageNum,
+                    pageCount);
+            pageVO.setList(cookMapper.selectCookList(cookGroup, cookType,
+                    (pageNum - 1) * pageSize, pageSize));
 
-        return pageVO;
+            return pageVO;
+        } catch (SQLException e) {
+            throw new ServiceException("获取失败");
+        }
     }
 
     @Override

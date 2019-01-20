@@ -14,6 +14,12 @@ public class ServiceException extends Exception {
     // 页码数已经超出菜谱列表的结尾
     public static final int COOK_LIST_END = 4;
 
+    // 页码数已经超出活动列表的结尾
+    public static final int ACTIVITYLIST_END = 5;
+
+    // 页码数已经超出参与活动的菜谱列表的结尾
+    public static final int PARTAKE_COOK_LIST_END = 6;
+
 
     private int errorCode;
 

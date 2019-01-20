@@ -7,6 +7,7 @@
     <mappers>
         <mapper resource="mybatis/mapper/AdminInfoMapper.xml" />
         <mapper resource="mybatis/mapper/UserInfoMapper.xml" />
+
         <mapper resource="mybatis/mapper/TopicInfoMapper.xml" />
         <mapper resource="mybatis/mapper/CommentInfoMapper.xml" />
         <mapper resource="mybatis/mapper/ReplyInfoMapper.xml" />
@@ -16,6 +17,10 @@
         <mapper resource="mybatis/mapper/MainmaterialsMapper.xml" />
         <mapper resource="mybatis/mapper/AccessoriesMapper.xml" />
         <mapper resource="mybatis/mapper/ProceduresMapper.xml" />
+
+        <mapper resource="mybatis/mapper/ActivityInfoMapper.xml" />
+        <mapper resource="mybatis/mapper/PartakeActivityMapper.xml" />
+
     </mappers>
 
 </configuration>

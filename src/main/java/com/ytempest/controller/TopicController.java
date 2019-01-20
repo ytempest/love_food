@@ -48,8 +48,8 @@ public class TopicController {
     @GetMapping("/list")
     public BaseResult getTopicList(@RequestParam("pageNum") Integer pageNum,
                                    @RequestParam("pageSize") Integer pageSize) {
-        LogUtils.e(TAG, "login: pageNum=" + pageNum);
-        LogUtils.e(TAG, "login: pageSize=" + pageSize);
+        LogUtils.d(TAG, "login: pageNum=" + pageNum);
+        LogUtils.d(TAG, "login: pageSize=" + pageSize);
 
         BaseResult result = ResultUtils.result();
         try {
@@ -59,10 +59,8 @@ public class TopicController {
             if (e.getErrorCode() == ServiceException.TOPIC_LIST_END) {
                 ResultUtils.setError(result, "已经到底", ResultUtils.NullList);
             } else {
-                ResultUtils.setError(result, "获取失败", ResultUtils.NullList);
+                ResultUtils.setError(result, e.getMessage(), ResultUtils.NullList);
             }
-        } catch (SQLException e) {
-            ResultUtils.setError(result, "获取失败", ResultUtils.NullList);
         }
         return result;
     }
