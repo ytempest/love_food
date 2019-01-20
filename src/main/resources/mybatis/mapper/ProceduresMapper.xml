@@ -3,17 +3,31 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ytempest.mapper.ProceduresMapper">
 
-    <insert id="insertList" parameterType="java.util.List" >
+    <select id="selectList" resultMap="Procedures_Info">
+		SELECT * FROM procedures WHERE cook_id= #{arg0}
+	</select>
+
+
+    <insert id="insertList" parameterType="java.util.List">
         INSERT INTO procedures(
         proce_id, cook_id, proce_no, proce_image_url, proce_desc)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.proceId}, #{item.cookId}, #{item.proceNo}, #{item.proceImageUrl}, #{item.proceDesc})
+            (#{item.proceId}, #{item.cookId}, #{item.proceNo}, #{item.proceImageUrl},
+            #{item.proceDesc})
         </foreach>
     </insert>
 
     <delete id="delete" parameterType="Long">
         DELETE FROM procedures WHERE cook_id =#{arg0}
     </delete>
+
+    <resultMap id="Procedures_Info" type="com.ytempest.vo.ProceduresVO">
+        <id property="proceId" column="proce_id" />
+        <result property="cookId" column="cook_id" />
+        <result property="proceNo" column="proce_no" />
+        <result property="proceImageUrl" column="proce_image_url" />
+        <result property="proceDesc" column="proce_desc" />
+    </resultMap>
 
 </mapper>

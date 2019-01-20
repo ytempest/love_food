@@ -3,8 +3,12 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ytempest.mapper.CookInfoMapper">
 
+    <select id="selectById" resultMap="Cook_Base_Info">
+		SELECT * FROM cookbook WHERE cook_id= #{arg0}
+	</select>
+
     <!-- 查找第index个记录之后的count个记录 -->
-    <select id="selectCookList" resultMap="Cook_List">
+    <select id="selectCookList" resultMap="Cook_Base_Info">
         SELECT * FROM cookbook
         WHERE cook_group=#{arg0} AND cook_type=#{arg1} LIMIT #{arg2},#{arg3}
 	</select>
@@ -44,7 +48,19 @@
         DELETE FROM cookbook WHERE cook_id = #{arg0}
     </delete>
 
-    <resultMap id="Cook_List" type="com.ytempest.vo.CookBaseInfoVO">
+    <update id="updateById">
+        UPDATE cookbook SET
+        cook_group = #{cookGroup},
+        cook_type = #{cookType},
+        cook_image_url = #{cookImageUrl},
+        cook_user_id = #{cookUserId},
+        cook_title = #{cookTitle},
+        cook_desc = #{cookDesc},
+        cook_publish_time= #{cookPublishTime}
+        WHERE cook_id = #{cookId}
+    </update>
+
+    <resultMap id="Cook_Base_Info" type="com.ytempest.vo.CookBaseInfoVO">
         <id property="cookId" column="cook_id" />
         <result property="cookGroup" column="cook_group" />
         <result property="cookType" column="cook_type" />

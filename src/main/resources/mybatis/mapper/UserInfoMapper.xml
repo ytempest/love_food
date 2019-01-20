@@ -64,24 +64,17 @@
     <update id="updateById">
 		UPDATE user_info
 		SET
-		user_pwd =
-		#{userPwd},
+		user_pwd = #{userPwd},
 		user_head_url = #{userHeadUrl},
-		user_sex =
-		#{userSex},
-		user_birth =
-		#{userBirth},
-		user_phone =
-		#{userPhone},
-		user_email =
-		#{userEmail},
+		user_sex = #{userSex},
+		user_birth = #{userBirth},
+		user_phone = #{userPhone},
+		user_email = #{userEmail},
 		user_qq = #{userQQ},
-		user_register_time =
-		#{userRegisterTime},
+		user_register_time = #{userRegisterTime},
 		user_status = #{userStatus}
 		WHERE
-		user_account =
-		#{userAccount};
+		user_account = #{userAccount};
 	</update>
 
 

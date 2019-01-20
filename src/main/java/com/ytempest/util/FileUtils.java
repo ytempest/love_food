@@ -67,6 +67,13 @@ public class FileUtils {
         return false;
     }
 
+    public static void deleteImage(String imageUrl) {
+        File file = new File(PROJECT_PATH, imageUrl);
+        if (file.exists()) {
+            file.delete();
+        }
+    }
+
 
     interface Configure {
         String IMAGE_DIR = "image";
@@ -75,6 +82,4 @@ public class FileUtils {
         String COOK_PROCEDURE_DIR = IMAGE_DIR + "/cookProcedure";
         String USER_HEAD_DIR = IMAGE_DIR + "/userHead";
     }
-
-
 }

@@ -6,6 +6,7 @@ import com.ytempest.mapper.CookInfoMapper;
 import com.ytempest.mapper.MainmaterialsMapper;
 import com.ytempest.mapper.ProceduresMapper;
 import com.ytempest.service.CookInfoService;
+import com.ytempest.util.CollectionUtils;
 import com.ytempest.util.DateUtils;
 import com.ytempest.util.FileUtils;
 import com.ytempest.util.LogUtils;
@@ -27,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -112,10 +114,14 @@ public class CookInfoServiceImpl implements CookInfoService {
     public void deleteCook(Long cookId) throws ServiceException {
         if (cookId != null) {
             try {
+                CookBaseInfoVO cook = cookMapper.selectById(String.valueOf(cookId));
+                List<ProceduresVO> proceList = proceMapper.selectList(cookId);
+
                 mainMapper.delete(cookId);
                 accMapper.delete(cookId);
                 proceMapper.delete(cookId);
                 cookMapper.deleteCook(cookId);
+                deleteCookImage(cook, proceList);
             } catch (SQLException e) {
                 throw new ServiceException("删除失败");
             }
@@ -124,8 +130,41 @@ public class CookInfoServiceImpl implements CookInfoService {
         }
     }
 
+    private void deleteCookImage(CookBaseInfoVO cook, List<ProceduresVO> proceList) {
+        if (cook != null) {
+            FileUtils.deleteImage(cook.getCookImageUrl());
+        }
+        if (!CollectionUtils.isEmpty(proceList)) {
+            for (ProceduresVO proce : proceList) {
+                FileUtils.deleteImage(proce.getProceImageUrl());
+            }
+        }
+    }
+
     @Override
     public void updateCook(HttpServletRequest request) throws ServiceException {
+        try {
+            CookBaseInfoVO newCookInfo = obtainCook(request);
+            Long cookId = newCookInfo.getCookId();
+            CookDetailInfoVO oldCookInfo = cookMapper.selectCook(cookId);
+            List<ProceduresVO> oldProceList = proceMapper.selectList(cookId);
+            // 更新旧菜谱的基本数据
+            cookMapper.updateById(newCookInfo);
+
+            // 先删除旧数据
+            mainMapper.delete(cookId);
+            accMapper.delete(cookId);
+            proceMapper.delete(cookId);
+            // 再添加新数据
+            mainMapper.insertList(obtainMainmaterials(request, cookId));
+            accMapper.insertList(obtainAccessories(request, cookId));
+            proceMapper.insertList(obtainProcedures(request, cookId));
+
+            // 删除旧菜谱的成品图片和步骤的图片
+            deleteCookImage(oldCookInfo, oldProceList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
