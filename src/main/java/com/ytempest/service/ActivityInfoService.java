@@ -2,8 +2,10 @@ package com.ytempest.service;
 
 import com.ytempest.exception.ServiceException;
 import com.ytempest.vo.ActivityInfoVO;
-import com.ytempest.vo.CookBaseInfoVO;
 import com.ytempest.vo.PageVO;
+import com.ytempest.vo.UserActivityPrizeVO;
+
+import java.util.List;
 
 /**
  * @author ytempest
@@ -15,6 +17,5 @@ public interface ActivityInfoService {
 
     ActivityInfoVO getActivityInfo(Long actId) throws ServiceException;
 
-    PageVO<CookBaseInfoVO> getPartakeCookList(Long actId, Integer pageNum, Integer pageSize)
-            throws ServiceException;
+    List<UserActivityPrizeVO> getAwardList(Long actId) throws ServiceException;
 }

@@ -95,7 +95,7 @@ public class CookInfoServiceImpl implements CookInfoService {
     }
 
     @Override
-    public void addCook(HttpServletRequest request) throws ServiceException {
+    public CookBaseInfoVO addCook(HttpServletRequest request) throws ServiceException {
         try {
             CookBaseInfoVO cookInfo = obtainCook(request);
             cookMapper.insert(cookInfo);
@@ -107,6 +107,7 @@ public class CookInfoServiceImpl implements CookInfoService {
             mainMapper.insertList(mainList);
             accMapper.insertList(accList);
             proceMapper.insertList(proList);
+            return cookInfo;
         } catch (SQLException e) {
             throw new ServiceException("插入失败");
         }
@@ -294,5 +295,31 @@ public class CookInfoServiceImpl implements CookInfoService {
             throw new ServiceException("无法获取上传的菜谱成品图片");
         }
         return vo;
+    }
+
+    @Override
+    public PageVO<CookBaseInfoVO> getPartakeCookList(Long actId, Integer pageNum, Integer pageSize) throws ServiceException {
+        try {
+            long total = cookMapper.countPartakeCookList(actId);
+            int pageCount = (int) (total % pageSize == 0
+                    ? total / pageSize
+                    : total / pageSize + 1);
+            // 判断输入的页码是否超过数据的页码范围
+            if (pageNum < 1) {
+                throw new ServiceException("页码数必须要大于等于1");
+            }
+            if (pageNum > pageCount) {
+                throw new ServiceException(ServiceException.PARTAKE_COOK_LIST_END, "已经到底");
+            }
+
+            // 封装PageVO数据
+            PageVO<CookBaseInfoVO> pageVO = new PageVO<>(total, pageSize,
+                    pageNum, pageCount);
+            pageVO.setList(cookMapper.selectPartakeCookList(actId, (pageNum - 1) * pageSize, pageSize));
+
+            return pageVO;
+        } catch (SQLException e) {
+            throw new ServiceException("获取失败");
+        }
     }
 }

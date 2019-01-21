@@ -7,6 +7,11 @@
 		SELECT * FROM partakes_activity WHERE user_id=#{arg0} AND act_id=#{arg1};
 	</select>
 
+    <insert id="insert" parameterType="com.ytempest.vo.PartakeActivityVO">
+        INSERT INTO partakes_activity(part_id, act_id, cook_id, user_id)
+        VALUES (#{partId}, #{actId}, #{cookId}, #{userId});
+    </insert>
+
     <resultMap id="Partake_Info" type="com.ytempest.vo.PartakeActivityVO">
         <id property="partId" column="part_id" />
         <result property="actId" column="act_id" />

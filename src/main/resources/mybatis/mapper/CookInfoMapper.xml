@@ -59,6 +59,20 @@
         WHERE cook_id = #{cookId}
     </update>
 
+    <!-- 根据活动Id获取参与活动的所有菜谱 -->
+    <select id="selectPartakeCookList" resultMap="Cook_Base_Info">
+        SELECT cookbook.* FROM
+        (SELECT cook_id AS c_id FROM partakes_activity
+        WHERE act_id=#{arg0} LIMIT #{arg1},#{arg2}) c
+        LEFT JOIN cookbook
+        ON c.c_id = cookbook.cook_id;
+	</select>
+
+    <select id="countPartakeCookList" resultType="Long">
+		SELECT COUNT(*) FROM partakes_activity WHERE act_id=#{arg0}
+	</select>
+
+
     <resultMap id="Cook_Base_Info" type="com.ytempest.vo.CookBaseInfoVO">
         <id property="cookId" column="cook_id" />
         <result property="cookGroup" column="cook_group" />

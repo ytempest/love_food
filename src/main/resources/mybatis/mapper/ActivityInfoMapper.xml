@@ -19,6 +19,36 @@
         SELECT COUNT(*) AS partake_count FROM partakes_activity WHERE act_id=#{arg0}) p
     </select>
 
+
+    <select id="selectAwardList" resultMap="Award_List">
+        SELECT a.awa_id,
+        p.user_id,u.user_account,u.user_head_url,
+        p.cook_id,c.cook_title,
+        p1.prize_id,p1.prize_name,p1.prize_prize FROM
+        (SELECT awa_id,part_id,prize_id FROM award_activity WHERE act_id=#{arg0}  ORDER BY prize_id ASC) a
+        LEFT JOIN partakes_activity p
+        ON a.part_id=p.part_id
+        LEFT JOIN prizes p1
+        ON a.prize_id=p1.prize_id
+        LEFT JOIN user_info u
+        ON p.user_id=u.user_id
+        LEFT JOIN cookbook c
+        ON p.cook_id=c.cook_id
+    </select>
+
+
+    <resultMap id="Award_List" type="com.ytempest.vo.UserActivityPrizeVO">
+        <id property="awaId" column="awa_id" />
+        <result property="userId" column="user_id" />
+        <result property="userAccount" column="user_account" />
+        <result property="cookId" column="cook_id" />
+        <result property="cookName" column="cook_name" />
+
+        <result property="prizeId" column="prize_id" />
+        <result property="prizeName" column="prize_name" />
+        <result property="prizePrize" column="prize_prize" />
+    </resultMap>
+
     <resultMap id="Activity_Base_Info" type="com.ytempest.vo.ActivityInfoVO">
         <id property="actId" column="act_id" />
         <result property="actImageUrl" column="act_image_url" />
@@ -46,8 +76,6 @@
             <result property="prizePrize" column="prize_prize" />
         </collection>
 
-
     </resultMap>
-
 
 </mapper>

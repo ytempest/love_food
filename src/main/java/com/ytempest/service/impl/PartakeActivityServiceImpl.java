@@ -29,4 +29,13 @@ public class PartakeActivityServiceImpl implements PartakeActivityService {
             throw new ServiceException("查询失败");
         }
     }
+
+    @Override
+    public void partakeActivity(PartakeActivityVO partake) throws ServiceException {
+        try {
+            mapper.insert(partake);
+        } catch (SQLException e) {
+            throw new ServiceException("参加失败，请重试");
+        }
+    }
 }

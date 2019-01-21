@@ -9,4 +9,6 @@ import com.ytempest.vo.PartakeActivityVO;
  */
 public interface PartakeActivityService {
     PartakeActivityVO isPartake(Long userId, Long actId) throws ServiceException;
+
+    void partakeActivity(PartakeActivityVO partake) throws ServiceException;
 }

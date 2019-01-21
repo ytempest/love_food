@@ -20,9 +20,15 @@ public interface CookInfoService {
 
     CookDetailInfoVO getCookInfo(Long cookId) throws ServiceException;
 
-    void addCook(HttpServletRequest request) throws ServiceException;
+    CookBaseInfoVO addCook(HttpServletRequest request) throws ServiceException;
 
     void deleteCook(Long cookId) throws ServiceException;
 
     void updateCook(HttpServletRequest request) throws ServiceException;
+
+    /**
+     * 根据活动Id获取参与活动的所有菜谱
+     */
+    PageVO<CookBaseInfoVO> getPartakeCookList(Long actId, Integer pageNum, Integer pageSize)
+            throws ServiceException;
 }

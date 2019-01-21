@@ -5,10 +5,12 @@ import com.ytempest.mapper.ActivityInfoMapper;
 import com.ytempest.service.ActivityInfoService;
 import com.ytempest.vo.ActivityInfoVO;
 import com.ytempest.vo.PageVO;
+import com.ytempest.vo.UserActivityPrizeVO;
 
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -56,6 +58,15 @@ public class ActivityInfoServiceImpl implements ActivityInfoService {
     public ActivityInfoVO getActivityInfo(Long actId) throws ServiceException {
         try {
             return actMapper.selectDetailInfo(actId);
+        } catch (SQLException e) {
+            throw new ServiceException("获取失败");
+        }
+    }
+
+    @Override
+    public List<UserActivityPrizeVO> getAwardList(Long actId) throws ServiceException {
+        try {
+            return actMapper.selectAwardList(actId);
         } catch (SQLException e) {
             throw new ServiceException("获取失败");
         }
