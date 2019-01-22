@@ -4,6 +4,7 @@ import com.ytempest.exception.ServiceException;
 import com.ytempest.service.ActivityInfoService;
 import com.ytempest.service.CookInfoService;
 import com.ytempest.service.PartakeActivityService;
+import com.ytempest.util.LogUtils;
 import com.ytempest.util.NumberUtils;
 import com.ytempest.util.ResultUtils;
 import com.ytempest.vo.ActivityInfoVO;
@@ -19,7 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -121,8 +126,18 @@ public class ActivityController {
     public BaseResult getAwardList(@RequestParam("actId") Long actId) {
         BaseResult result = ResultUtils.result();
         try {
-            List<UserActivityPrizeVO> list = actService.getAwardList(actId);
-            ResultUtils.setSuccess(result, "获取成功", list);
+            List<UserActivityPrizeVO> awardList = actService.getAwardList(actId);
+            Map<String, List<UserActivityPrizeVO>> map = new LinkedHashMap<>();
+            for (UserActivityPrizeVO prize : awardList) {
+                String prizeName = prize.getPrizeName();
+                List<UserActivityPrizeVO> list = map.get(prizeName);
+                if (list == null) {
+                    list = new ArrayList<>();
+                    map.put(prizeName, list);
+                }
+                list.add(prize);
+            }
+            ResultUtils.setSuccess(result, "获取成功", map);
         } catch (ServiceException e) {
             ResultUtils.setError(result, e.getMessage(), ResultUtils.NullObj);
         }
@@ -143,7 +158,7 @@ public class ActivityController {
             partake.setCookId(cook.getCookId());
             partake.setUserId(cook.getCookUserId());
             parService.partakeActivity(partake);
-            ResultUtils.setSuccess(result,"参加成功",ResultUtils.NullObj);
+            ResultUtils.setSuccess(result, "参加成功", ResultUtils.NullObj);
         } catch (ServiceException e) {
             ResultUtils.setError(result, e.getMessage(), ResultUtils.NullObj);
         }

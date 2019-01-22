@@ -14,6 +14,14 @@ public class UserActivityPrizeVO extends PrizeVO {
     public UserActivityPrizeVO() {
     }
 
+    public Long getAwaId() {
+        return awaId;
+    }
+
+    public void setAwaId(Long awaId) {
+        this.awaId = awaId;
+    }
+
     public Long getUserId() {
         return userId;
     }
