@@ -20,10 +20,16 @@ public class ServiceException extends Exception {
     // 页码数已经超出参与活动的菜谱列表的结尾
     public static final int PARTAKE_COOK_LIST_END = 6;
 
+    // 页码数已经超出用户拥有的的菜谱列表的结尾
+    public static final int USER_COOK_LIST_END = 7;
+
+    // 页码数已经超出用户发布的话题列表的结尾
+    public static final int USER_TOPIC_LIST_END = 8;
+
 
     private int errorCode;
 
-    public ServiceException( String message) {
+    public ServiceException(String message) {
         super(message);
         this.errorCode = OTHRE;
     }

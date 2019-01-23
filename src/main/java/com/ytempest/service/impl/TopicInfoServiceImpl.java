@@ -132,4 +132,30 @@ public class TopicInfoServiceImpl implements TopicInfoService {
             }
         }
     }
+
+    @Override
+    public PageVO<TopicInfoVO> getUserTopicList(Long userId, Integer pageNum, Integer pageSize) throws ServiceException {
+        try {
+            long total = topicMapper.countUserTopicList(userId);
+            int pageCount = (int) (total % pageSize == 0
+                    ? total / pageSize
+                    : total / pageSize + 1);
+            // 判断输入的页码是否超过数据的页码范围
+            if (pageNum < 1) {
+                throw new ServiceException("页码数必须要大于等于1");
+            }
+            if (pageNum > pageCount) {
+                throw new ServiceException(ServiceException.USER_TOPIC_LIST_END, "已经到底");
+            }
+
+            // 封装PageVO数据
+            PageVO<TopicInfoVO> pageVO = new PageVO<>(total, pageSize, pageNum,
+                    pageCount);
+            pageVO.setList(topicMapper.selectUserTopicList(userId,
+                    (pageNum - 1) * pageSize, pageSize));
+            return pageVO;
+        } catch (SQLException e) {
+            throw new ServiceException("获取失败");
+        }
+    }
 }

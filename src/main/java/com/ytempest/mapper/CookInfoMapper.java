@@ -28,4 +28,9 @@ public interface CookInfoMapper extends MapperSupport<CookBaseInfoVO> {
             throws SQLException;
 
     long countPartakeCookList(Long actId) throws SQLException;
+
+    List<CookBaseInfoVO> selectUserCookList(Long userId, Integer pageNum, Integer pageSize)
+            throws SQLException;
+
+    long countUserCookList(Long userId) throws SQLException;
 }

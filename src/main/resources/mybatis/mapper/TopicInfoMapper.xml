@@ -25,7 +25,7 @@
         ON t1.topic_id  = z.topic_id3
         ) t2
         LEFT JOIN topic_images
-        ON t2.topic_id = topic_images.topic_id
+        ON t2.topic_id = topic_images.topic_id ORDER BY topic_publish_time DESC
 	</select>
 
     <select id="countAll" resultType="Long">
@@ -46,6 +46,29 @@
         (SELECT * FROM replys WHERE comment_id = #{arg0}) r
         LEFT JOIN user_info u
         ON r.reply_from_user=u.user_id
+	</select>
+
+    <!-- 根据用户Id获取其所有话题 -->
+    <select id="selectUserTopicList" resultMap="TopicInfo_List">
+        SELECT * FROM
+        (
+        SELECT * FROM (
+        SELECT t.*,user_info.user_head_url,user_info.user_account FROM
+        (SELECT * FROM topics WHERE user_id=#{arg0}) t
+        LEFT JOIN user_info ON t.user_id = user_info.user_id LIMIT #{arg1},#{arg2}) t1
+        LEFT JOIN
+        (SELECT topic_id AS topic_id2,COUNT(*) AS comment_count FROM comments GROUP BY topic_id) c
+        ON t1.topic_id = c.topic_id2
+        LEFT JOIN
+        (SELECT topic_id AS topic_id3,COUNT(*) AS zan_count FROM zans GROUP BY topic_id) z
+        ON t1.topic_id  = z.topic_id3
+        ) t2
+        LEFT JOIN topic_images
+        ON t2.topic_id = topic_images.topic_id ORDER BY topic_publish_time DESC
+	</select>
+
+    <select id="countUserTopicList" resultType="Long">
+		SELECT COUNT(*) FROM topics WHERE user_id=#{arg0}
 	</select>
 
 

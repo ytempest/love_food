@@ -49,8 +49,12 @@ public interface UserInfoService {
      */
     void updateUser(UserInfoVO model) throws Exception;
 
+    /* API */
+
     /**
      * 根据账号或者手机号、密码进行登录
      */
-    UserInfoVO login(String account, String password) throws SQLException, ServiceException;
+    UserInfoVO login(String account, String password) throws ServiceException;
+
+
 }

@@ -322,4 +322,31 @@ public class CookInfoServiceImpl implements CookInfoService {
             throw new ServiceException("获取失败");
         }
     }
+
+    @Override
+    public PageVO<CookBaseInfoVO> getUserCookList(Long userId, Integer pageNum, Integer pageSize) throws ServiceException {
+
+        try {
+            long total = cookMapper.countUserCookList(userId);
+            int pageCount = (int) (total % pageSize == 0
+                    ? total / pageSize
+                    : total / pageSize + 1);
+            // 判断输入的页码是否超过数据的页码范围
+            if (pageNum < 1) {
+                throw new ServiceException("页码数必须要大于等于1");
+            }
+            if (pageNum > pageCount) {
+                throw new ServiceException(ServiceException.USER_COOK_LIST_END, "已经到底");
+            }
+
+            // 封装PageVO数据
+            PageVO<CookBaseInfoVO> pageVO = new PageVO<>(total, pageSize,
+                    pageNum, pageCount);
+            pageVO.setList(cookMapper.selectUserCookList(userId, (pageNum - 1) * pageSize, pageSize));
+
+            return pageVO;
+        } catch (SQLException e) {
+            throw new ServiceException("获取失败");
+        }
+    }
 }

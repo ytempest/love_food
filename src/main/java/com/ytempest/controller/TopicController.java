@@ -48,8 +48,6 @@ public class TopicController {
     @GetMapping("/list")
     public BaseResult getTopicList(@RequestParam("pageNum") Integer pageNum,
                                    @RequestParam("pageSize") Integer pageSize) {
-        LogUtils.d(TAG, "login: pageNum=" + pageNum);
-        LogUtils.d(TAG, "login: pageSize=" + pageSize);
 
         BaseResult result = ResultUtils.result();
         try {
@@ -118,7 +116,7 @@ public class TopicController {
             commentService.addComment(comment);
             ResultUtils.setSuccess(result, "评论成功", ResultUtils.NullObj);
         } catch (ServiceException e) {
-            ResultUtils.setError(result, "评论失败", ResultUtils.NullObj);
+            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullObj);
         }
 
         return result;

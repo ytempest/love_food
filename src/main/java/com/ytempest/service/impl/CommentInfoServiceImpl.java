@@ -20,9 +20,12 @@ public class CommentInfoServiceImpl implements CommentInfoService {
     @Override
     public void addComment(CommentInfoVO comment) throws ServiceException {
         try {
+            if (comment.getCommentFromUser().equals(comment.getCommentToUser())) {
+                throw new ServiceException("不能自己评论自己");
+            }
             mapper.insert(comment);
         } catch (SQLException e) {
-            throw new ServiceException("插入失败");
+            throw new ServiceException("评论失败");
         }
     }
 }

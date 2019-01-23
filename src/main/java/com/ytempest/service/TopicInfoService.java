@@ -35,4 +35,7 @@ public interface TopicInfoService {
 
     List<TopicDetailCommentVO> getCommentInfo(Integer topicId, Integer commentId,
                                               Integer replyToUser) throws Exception;
+
+    PageVO<TopicInfoVO> getUserTopicList(Long userId, Integer pageNum, Integer pageSize)
+            throws ServiceException;
 }

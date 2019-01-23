@@ -1,10 +1,15 @@
 package com.ytempest.controller;
 
+import com.ytempest.service.CookInfoService;
+import com.ytempest.service.TopicInfoService;
 import com.ytempest.util.LogUtils;
 import com.ytempest.util.ResultUtils;
 import com.ytempest.exception.ServiceException;
 import com.ytempest.service.UserInfoService;
 import com.ytempest.vo.BaseResult;
+import com.ytempest.vo.CookBaseInfoVO;
+import com.ytempest.vo.PageVO;
+import com.ytempest.vo.TopicInfoVO;
 import com.ytempest.vo.UserInfoVO;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,18 +18,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.sql.SQLException;
 import java.util.Date;
 
 import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/user")
-public class UserLoginController {
-    private static final String TAG = "UserLoginController";
+public class UserController {
+    private static final String TAG = "UserController";
 
     @Resource(name = "UserInfoService")
-    private UserInfoService service;
+    private UserInfoService userService;
+
+    @Resource(name = "CookInfoService")
+    private CookInfoService cookService;
+
+    @Resource(name = "TopicInfoService")
+    private TopicInfoService topicService;
 
     /**
      * 根据账号和手机号码登录
@@ -35,12 +45,9 @@ public class UserLoginController {
         BaseResult result = ResultUtils.result();
 
         try {
-            UserInfoVO userInfoVO = service.login(account, password);
+            UserInfoVO userInfoVO = userService.login(account, password);
             ResultUtils.setSuccess(result, "登录成功", userInfoVO);
         } catch (ServiceException e) {
-            String msg = e.getMessage();
-            ResultUtils.setError(result, msg, ResultUtils.NullObj);
-        } catch (SQLException e) {
             String msg = e.getMessage();
             ResultUtils.setError(result, msg, ResultUtils.NullObj);
         }
@@ -54,7 +61,7 @@ public class UserLoginController {
     public BaseResult judge(@RequestParam("account") String account) {
         BaseResult result = ResultUtils.result();
         try {
-            UserInfoVO userInfo = service.selectByAccount(account);
+            UserInfoVO userInfo = userService.selectByAccount(account);
             if (userInfo == null) {
                 ResultUtils.setError(result, "该账号可以使用", false);
             } else {
@@ -81,7 +88,7 @@ public class UserLoginController {
             userInfo.setUserPwd(pwd);
             userInfo.setUserPhone(phone);
             userInfo.setUserRegisterTime(new Date());
-            service.addUser(userInfo);
+            userService.addUser(userInfo);
             LogUtils.e(TAG, "register: user=" + userInfo);
             ResultUtils.setSuccess(result, "注册成功", userInfo);
         } catch (Exception e) {
@@ -89,4 +96,47 @@ public class UserLoginController {
         }
         return result;
     }
+
+
+    /**
+     * 获取用户所有的菜谱
+     */
+    @GetMapping("/cookList")
+    public BaseResult getUserCookList(@RequestParam("pageNum") Integer pageNum,
+                                      @RequestParam("pageSize") Integer pageSize,
+                                      @RequestParam("userId") Long userId) {
+
+        BaseResult result = ResultUtils.result();
+        try {
+            PageVO<CookBaseInfoVO> list = cookService.getUserCookList(userId, pageNum, pageSize);
+            ResultUtils.setSuccess(result, "获取成功", list);
+        } catch (ServiceException e) {
+            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullObj);
+        }
+        return result;
+    }
+
+    /**
+     * 根据用户Id获取该用户发布的话题列表
+     */
+    @GetMapping("/topicList")
+    public BaseResult getUserTopicList(@RequestParam("pageNum") Integer pageNum,
+                                   @RequestParam("pageSize") Integer pageSize,
+                                   @RequestParam("userId") Long userId) {
+
+        BaseResult result = ResultUtils.result();
+        try {
+            PageVO<TopicInfoVO> topicList = topicService.getUserTopicList(userId, pageNum, pageSize);
+            ResultUtils.setSuccess(result, "获取成功", topicList);
+        } catch (ServiceException e) {
+            if (e.getErrorCode() == ServiceException.USER_TOPIC_LIST_END) {
+                ResultUtils.setError(result, "已经到底", ResultUtils.NullList);
+            } else {
+                ResultUtils.setError(result, e.getMessage(), ResultUtils.NullList);
+            }
+        }
+        return result;
+    }
+
+
 }

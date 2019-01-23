@@ -19,4 +19,9 @@ public interface TopicInfoMapper extends MapperSupport<BaseTopicInfoVO> {
 
     List<TopicDetailCommentVO> selectDetailComment(Integer topicId, Integer commentId,
                                                    Integer replyToUser);
+
+    List<TopicInfoVO> selectUserTopicList(Long userId, Integer pageNum, Integer pageSize)
+            throws SQLException;
+
+    long countUserTopicList(Long userId) throws SQLException;
 }

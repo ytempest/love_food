@@ -31,4 +31,10 @@ public interface CookInfoService {
      */
     PageVO<CookBaseInfoVO> getPartakeCookList(Long actId, Integer pageNum, Integer pageSize)
             throws ServiceException;
+
+    /**
+     * 根据用户Id获取参与活动的所有菜谱
+     */
+    PageVO<CookBaseInfoVO> getUserCookList(Long userId, Integer pageNum, Integer pageSize)
+            throws ServiceException;
 }

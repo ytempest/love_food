@@ -72,6 +72,17 @@
 		SELECT COUNT(*) FROM partakes_activity WHERE act_id=#{arg0}
 	</select>
 
+    <!-- 根据用户Id获取其所有菜谱 -->
+    <select id="selectUserCookList" resultMap="Cook_Base_Info">
+        SELECT * FROM cookbook WHERE cook_user_id= #{arg0}
+        ORDER BY cook_publish_time DESC LIMIT #{arg1},#{arg2}
+	</select>
+
+    <select id="countUserCookList" resultType="Long">
+		SELECT COUNT(*) FROM cookbook WHERE cook_user_id=#{arg0}
+	</select>
+
+
 
     <resultMap id="Cook_Base_Info" type="com.ytempest.vo.CookBaseInfoVO">
         <id property="cookId" column="cook_id" />

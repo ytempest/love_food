@@ -46,23 +46,21 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public UserInfoVO login(String account, String password) throws SQLException, ServiceException {
+    public UserInfoVO login(String account, String password) throws ServiceException {
 
-        UserInfoVO vo = mapper.selectById(account.trim());
-        String encryptedPassword = SecurityUtils.encrypt(password.trim());
+        try {
+            UserInfoVO vo = mapper.selectById(account.trim());
+            String encryptedPassword = SecurityUtils.encrypt(password.trim());
 
-        LogUtils.e(TAG, "login: account " + account);
-        LogUtils.e(TAG, "login: password " + password);
-        LogUtils.e(TAG, "login: vo " + vo);
-
-
-        if (vo == null) {
-            throw new ServiceException("该账号不存在");
-        } else if (!encryptedPassword.equals(vo.getUserPwd())) {
-            throw new ServiceException("密码错误");
+            if (vo == null) {
+                throw new ServiceException("该账号不存在");
+            } else if (!encryptedPassword.equals(vo.getUserPwd())) {
+                throw new ServiceException("密码错误");
+            }
+            return vo;
+        } catch (SQLException e) {
+            throw new ServiceException("账号异常");
         }
-
-        return vo;
     }
 
     @Override
