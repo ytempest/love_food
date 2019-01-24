@@ -61,4 +61,7 @@ public interface UserInfoService {
      */
     UserInfoVO updateBaseUserInfo(HttpServletRequest model) throws ServiceException;
 
+    void updateUserPwd(Long userId, String oldPwd, String newPwd, String confirmPwd)
+            throws ServiceException;
+
 }

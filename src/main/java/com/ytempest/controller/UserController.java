@@ -155,4 +155,23 @@ public class UserController {
         return result;
     }
 
+    /**
+     * 修改用户密码
+     */
+    @PostMapping("/updatePwd")
+    public BaseResult register(@RequestParam("userId") Long userId,
+                               @RequestParam("oldPwd") String oldPwd,
+                               @RequestParam("newPwd") String newPwd,
+                               @RequestParam("confirmPwd") String confirmPwd) {
+
+        BaseResult result = ResultUtils.result();
+        try {
+            userService.updateUserPwd(userId, oldPwd, newPwd, confirmPwd);
+            ResultUtils.setSuccess(result,"修改成功",ResultUtils.NullObj);
+        } catch (ServiceException e) {
+            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullObj);
+        }
+        return result;
+    }
+
 }

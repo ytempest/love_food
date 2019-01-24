@@ -1,31 +1,30 @@
 package com.ytempest.service.impl;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-
+import com.ytempest.exception.ServiceException;
+import com.ytempest.mapper.UserInfoMapper;
+import com.ytempest.service.UserInfoService;
 import com.ytempest.util.DateUtils;
 import com.ytempest.util.FileUtils;
 import com.ytempest.util.LogUtils;
 import com.ytempest.util.NumberUtils;
 import com.ytempest.util.SecurityUtils;
-import com.ytempest.exception.ServiceException;
-import com.ytempest.mapper.UserInfoMapper;
-import com.ytempest.service.UserInfoService;
-import com.ytempest.util.TextUtils;
 import com.ytempest.util.Utils;
 import com.ytempest.vo.PageVO;
 import com.ytempest.vo.UserInfoVO;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.crypto.Cipher;
+import javax.servlet.http.HttpServletRequest;
 
 @Service("UserInfoService")
 public class UserInfoServiceImpl implements UserInfoService {
@@ -208,7 +207,27 @@ public class UserInfoServiceImpl implements UserInfoService {
         } catch (IOException e) {
             throw new ServiceException("无法获取上传的头像");
         }
+    }
 
-
+    @Override
+    public void updateUserPwd(Long userId, String oldPwd, String newPwd, String confirmPwd) throws ServiceException {
+        try {
+            UserInfoVO info = mapper.selectById(String.valueOf(userId));
+            String userPwd = info.getUserPwd();
+            // 如果密码正确
+            if (userPwd.equals(SecurityUtils.encrypt(oldPwd))) {
+                // 如果前后输入的密码不一致
+                if (!newPwd.equals(confirmPwd)) {
+                    throw new ServiceException("新密码不一致");
+                } else {
+                    info.setUserPwd(SecurityUtils.encrypt(newPwd));
+                    mapper.updateById(info);
+                }
+            } else {
+                throw new ServiceException("密码错误");
+            }
+        } catch (SQLException e) {
+            throw new ServiceException("修改失败，请重试");
+        }
     }
 }
