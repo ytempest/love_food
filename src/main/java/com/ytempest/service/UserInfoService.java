@@ -4,7 +4,7 @@ import com.ytempest.exception.ServiceException;
 import com.ytempest.vo.PageVO;
 import com.ytempest.vo.UserInfoVO;
 
-import java.sql.SQLException;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 定义处理Servlet层数据的相关规范，负责将数据查询层DAO的数据进行相关处理，以得到能直接给Servlet层进行使用的数据规格
@@ -56,5 +56,9 @@ public interface UserInfoService {
      */
     UserInfoVO login(String account, String password) throws ServiceException;
 
+    /**
+     * 更新用户信息，除密码
+     */
+    UserInfoVO updateBaseUserInfo(HttpServletRequest model) throws ServiceException;
 
 }

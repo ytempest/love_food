@@ -145,14 +145,22 @@ public class UserInfoVO {
 
     @Override
     public String toString() {
+        String birth = null;
+        if (userBirth != null) {
+            birth = new SimpleDateFormat("yyyy-MM-dd").format(userBirth);
+        }
+        String registerTime = null;
+        if (userRegisterTime != null) {
+            registerTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(
+                    userRegisterTime);
+        }
         return "UserInfoVO [userId=" + userId + ", userAccount=" + userAccount
                 + ", userPwd=" + userPwd + ", userHeadUrl=" + userHeadUrl
                 + ", userSex=" + userSex + ", userBirth="
-                + new SimpleDateFormat("yyyy-MM-dd").format(userBirth)
+                + birth
                 + ", userPhone=" + userPhone + ", userEmail=" + userEmail
                 + ", userQQ=" + userQQ + ", userRegisterTime="
-                + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(
-                userRegisterTime)
+                + registerTime
                 + ", userStatus=" + userStatus + "]";
     }
 

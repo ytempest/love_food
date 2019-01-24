@@ -1,5 +1,6 @@
 package com.ytempest.mapper;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -20,6 +21,8 @@ public interface UserInfoMapper extends MapperSupport<UserInfoVO> {
      *
      */
     // List<UserInfoVO> selectByStudent(UserInfoVO user);
+
+    UserInfoVO selectByAccount(String id) throws SQLException;
 
     List<UserInfoVO> fuzzySearchByAccount(String account, int index, int count);
 

@@ -8,7 +8,7 @@
 <mapper namespace="com.ytempest.mapper.UserInfoMapper">
 
     <!-- 通过用户名模糊搜索 -->
-    <select id="fuzzySearchByAccount" resultMap="UserInfo_Mapping">·
+    <select id="fuzzySearchByAccount" resultMap="UserInfo_Mapping">
 		select *
 		from
 		user_info
@@ -27,7 +27,7 @@
 
 
     <!-- id:指定这条SQL语句的id；resultMap：指定实体类和表的映射id -->
-    <select id="selectById" resultMap="UserInfo_Mapping">
+    <select id="selectByAccount" resultMap="UserInfo_Mapping">
 		select *
 		from user_info
 		where
@@ -59,7 +59,6 @@
         #{userRegisterTime},#{userStatus});
     </insert>
 
-
     <!-- 更新用户 -->
     <update id="updateById">
 		UPDATE user_info
@@ -88,6 +87,14 @@
 		SELECT count(*) FROM user_info;
 	</select>
 
+    <!--**********   API   **********-->
+
+    <select id="selectById" resultMap="UserInfo_Mapping">
+		select *
+		from user_info
+		where
+		user_id = #{arg0}
+	</select>
 
     <!-- 配置实体类和表的映射关系 -->
     <!-- id：映射关系的Id；type：映射的实体类 -->

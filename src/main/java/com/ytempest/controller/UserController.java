@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/user")
@@ -121,8 +122,8 @@ public class UserController {
      */
     @GetMapping("/topicList")
     public BaseResult getUserTopicList(@RequestParam("pageNum") Integer pageNum,
-                                   @RequestParam("pageSize") Integer pageSize,
-                                   @RequestParam("userId") Long userId) {
+                                       @RequestParam("pageSize") Integer pageSize,
+                                       @RequestParam("userId") Long userId) {
 
         BaseResult result = ResultUtils.result();
         try {
@@ -138,5 +139,20 @@ public class UserController {
         return result;
     }
 
+    /**
+     * 根据用户Id修改用户信息
+     */
+    @RequestMapping(value = "/updateInfo")
+    public BaseResult updateUserInfo(HttpServletRequest request) {
+
+        BaseResult result = ResultUtils.result();
+        try {
+            UserInfoVO info = userService.updateBaseUserInfo(request);
+            ResultUtils.setSuccess(result, "修改成功", info);
+        } catch (ServiceException e) {
+            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullObj);
+        }
+        return result;
+    }
 
 }

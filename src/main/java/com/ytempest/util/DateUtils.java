@@ -8,7 +8,11 @@ import java.util.Date;
  */
 public class DateUtils {
 
-    public static Date parseDate(String date) {
-        return new Date(NumberUtils.parseLong(date));
+    public static Date parseDate(String dateStr) {
+        Date date = null;
+        if (!TextUtils.isEmpty(dateStr)) {
+            date = new Date(NumberUtils.parseLong(dateStr));
+        }
+        return date;
     }
 }
