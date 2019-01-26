@@ -21,6 +21,9 @@
         <mapper resource="mybatis/mapper/ActivityInfoMapper.xml" />
         <mapper resource="mybatis/mapper/PartakeActivityMapper.xml" />
 
+        <mapper resource="mybatis/mapper/CollectionInfoMapper.xml" />
+
+
     </mappers>
 
 </configuration>

@@ -1,6 +1,7 @@
 package com.ytempest.service.impl;
 
 import com.ytempest.exception.ServiceException;
+import com.ytempest.mapper.CollectionInfoMapper;
 import com.ytempest.mapper.UserInfoMapper;
 import com.ytempest.service.UserInfoService;
 import com.ytempest.util.DateUtils;
@@ -9,6 +10,7 @@ import com.ytempest.util.LogUtils;
 import com.ytempest.util.NumberUtils;
 import com.ytempest.util.SecurityUtils;
 import com.ytempest.util.Utils;
+import com.ytempest.vo.CollectionInfo;
 import com.ytempest.vo.PageVO;
 import com.ytempest.vo.UserInfoVO;
 
@@ -23,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.crypto.Cipher;
 import javax.servlet.http.HttpServletRequest;
 
 @Service("UserInfoService")
@@ -37,23 +38,25 @@ public class UserInfoServiceImpl implements UserInfoService {
     private final int PAGE_SIZE = 10;
 
     @Resource(name = "UserInfoMapper")
-    private UserInfoMapper mapper;
+    private UserInfoMapper userMapper;
+    @Resource(name = "CollectionInfoMapper")
+    private CollectionInfoMapper collectMapper;
 
     @Override
     public void addUser(UserInfoVO user) throws Exception {
-        mapper.insert(user);
+        userMapper.insert(user);
     }
 
     @Override
     public void lockUser(String account) throws Exception {
-        UserInfoVO vo = mapper.selectByAccount(account);
+        UserInfoVO vo = userMapper.selectByAccount(account);
         vo.setUserStatus(vo.getUserStatus() == 1 ? 0 : 1);
-        mapper.updateById(vo);
+        userMapper.updateById(vo);
     }
 
     @Override
     public void updateUser(UserInfoVO model) throws Exception {
-        mapper.updateById(model);
+        userMapper.updateById(model);
     }
 
 
@@ -74,7 +77,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
         // 3、获取PageVO数据模型所需要的相关参数
         // 获取用户的记录总数
-        long total = mapper.countAll();
+        long total = userMapper.countAll();
         // 计算总页面数
         int pageCount = (int) (total % PAGE_SIZE == 0
                 ? total / PAGE_SIZE
@@ -88,7 +91,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         // 4、封装PageVO数据
         PageVO<UserInfoVO> pageVO = new PageVO<UserInfoVO>(total, PAGE_SIZE, pageNum,
                 pageCount);
-        pageVO.setList(mapper.selectAll((pageNum - 1) * PAGE_SIZE, PAGE_SIZE));
+        pageVO.setList(userMapper.selectAll((pageNum - 1) * PAGE_SIZE, PAGE_SIZE));
 
         return pageVO;
     }
@@ -107,8 +110,8 @@ public class UserInfoServiceImpl implements UserInfoService {
 
         // 2、获取PageVO需要的相关数据
         // 获取模糊搜索后的记录总数
-        long count = mapper.countFuzzySearch(key);
-        List<UserInfoVO> list = mapper.fuzzySearchByAccount(key,
+        long count = userMapper.countFuzzySearch(key);
+        List<UserInfoVO> list = userMapper.fuzzySearchByAccount(key,
                 (page - 1) * PAGE_SIZE, PAGE_SIZE);
         // 计算页面的总数
         int pageCount = (int) (count % PAGE_SIZE == 0
@@ -126,7 +129,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public UserInfoVO selectByAccount(String account) throws Exception {
-        return mapper.selectByAccount(account);
+        return userMapper.selectByAccount(account);
     }
 
     /**********   API   **********/
@@ -135,7 +138,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     public UserInfoVO login(String account, String password) throws ServiceException {
 
         try {
-            UserInfoVO vo = mapper.selectByAccount(account.trim());
+            UserInfoVO vo = userMapper.selectByAccount(account.trim());
             String encryptedPassword = SecurityUtils.encrypt(password.trim());
 
             if (vo == null) {
@@ -155,11 +158,11 @@ public class UserInfoServiceImpl implements UserInfoService {
         UserInfoVO newInfo = obtainUserInfo(request);
         LogUtils.e(TAG, "updateBaseUserInfo: newInfo = " + newInfo);
         try {
-            UserInfoVO oldInfo = mapper.selectById(String.valueOf(newInfo.getUserId()));
+            UserInfoVO oldInfo = userMapper.selectById(String.valueOf(newInfo.getUserId()));
             LogUtils.e(TAG, "updateBaseUserInfo: oldInfo = " + oldInfo);
 
             Utils.update(oldInfo, newInfo);
-            mapper.updateById(oldInfo);
+            userMapper.updateById(oldInfo);
             return oldInfo;
         } catch (SQLException e) {
             FileUtils.deleteImage(newInfo.getUserHeadUrl());
@@ -212,7 +215,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public void updateUserPwd(Long userId, String oldPwd, String newPwd, String confirmPwd) throws ServiceException {
         try {
-            UserInfoVO info = mapper.selectById(String.valueOf(userId));
+            UserInfoVO info = userMapper.selectById(String.valueOf(userId));
             String userPwd = info.getUserPwd();
             // 如果密码正确
             if (userPwd.equals(SecurityUtils.encrypt(oldPwd))) {
@@ -221,13 +224,44 @@ public class UserInfoServiceImpl implements UserInfoService {
                     throw new ServiceException("新密码不一致");
                 } else {
                     info.setUserPwd(SecurityUtils.encrypt(newPwd));
-                    mapper.updateById(info);
+                    userMapper.updateById(info);
                 }
             } else {
                 throw new ServiceException("密码错误");
             }
         } catch (SQLException e) {
             throw new ServiceException("修改失败，请重试");
+        }
+    }
+
+    @Override
+    public boolean isCollect(Long userId, Long cookId) throws ServiceException {
+        try {
+            CollectionInfo info = collectMapper.selectBy(userId, cookId);
+            if (info != null) {
+                return true;
+            }
+        } catch (SQLException e) {
+            throw new ServiceException("查询失败");
+        }
+        return false;
+    }
+
+    @Override
+    public void collectCook(Long userId, Long cookId) throws ServiceException {
+        CollectionInfo info = null;
+        try {
+            info = collectMapper.selectBy(userId, cookId);
+            // 如果还没有收藏
+            if (info == null) {
+                info = new CollectionInfo(null, userId, cookId);
+                collectMapper.insert(info);
+            } else {
+                // 如果已经收藏
+                collectMapper.deleteById(info.getCollectId());
+            }
+        } catch (Exception e) {
+            throw new ServiceException("操作失败，请重试");
         }
     }
 }

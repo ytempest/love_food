@@ -64,4 +64,9 @@ public interface UserInfoService {
     void updateUserPwd(Long userId, String oldPwd, String newPwd, String confirmPwd)
             throws ServiceException;
 
+    boolean isCollect(Long userId, Long cookId)
+            throws ServiceException;
+
+    void collectCook(Long userId, Long cookId)
+            throws ServiceException;
 }

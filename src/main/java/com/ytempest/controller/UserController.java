@@ -167,11 +167,47 @@ public class UserController {
         BaseResult result = ResultUtils.result();
         try {
             userService.updateUserPwd(userId, oldPwd, newPwd, confirmPwd);
-            ResultUtils.setSuccess(result,"修改成功",ResultUtils.NullObj);
+            ResultUtils.setSuccess(result, "修改成功", ResultUtils.NullObj);
         } catch (ServiceException e) {
             ResultUtils.setError(result, e.getMessage(), ResultUtils.NullObj);
         }
         return result;
     }
+
+    /**
+     * 判断用户是否收藏了指定的菜谱
+     */
+    @GetMapping("/isCollect")
+    public BaseResult isCollect(@RequestParam("userId") Long userId,
+                                @RequestParam("cookId") Long cookId) {
+
+        BaseResult result = ResultUtils.result();
+        try {
+            boolean isCollect = userService.isCollect(userId, cookId);
+            ResultUtils.setSuccess(result, "请求成功", isCollect);
+        } catch (ServiceException e) {
+            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullObj);
+        }
+        return result;
+    }
+
+
+    /**
+     * 为指定用户收藏指定菜谱，如果已经收藏则取消收藏
+     */
+    @PostMapping("/collectCook")
+    public BaseResult collectCook(@RequestParam("userId") Long userId,
+                                  @RequestParam("cookId") Long cookId) {
+
+        BaseResult result = ResultUtils.result();
+        try {
+            userService.collectCook(userId, cookId);
+            ResultUtils.setSuccess(result, "操作成功", ResultUtils.NullObj);
+        } catch (ServiceException e) {
+            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullObj);
+        }
+        return result;
+    }
+
 
 }
