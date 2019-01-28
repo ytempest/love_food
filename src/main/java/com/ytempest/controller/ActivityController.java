@@ -4,7 +4,6 @@ import com.ytempest.exception.ServiceException;
 import com.ytempest.service.ActivityInfoService;
 import com.ytempest.service.CookInfoService;
 import com.ytempest.service.PartakeActivityService;
-import com.ytempest.util.LogUtils;
 import com.ytempest.util.NumberUtils;
 import com.ytempest.util.ResultUtils;
 import com.ytempest.vo.ActivityInfoVO;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +54,7 @@ public class ActivityController {
             PageVO<ActivityInfoVO> list = actService.getActivityList(pageNum, pageSize);
             ResultUtils.setSuccess(result, "获取成功", list);
         } catch (ServiceException e) {
-            if (e.getErrorCode() == ServiceException.ACTIVITYLIST_END) {
+            if (e.getErrorCode() == ServiceException.ACTIVITY_LIST_END) {
                 ResultUtils.setError(result, "已经到底", ResultUtils.NullList);
             } else {
                 ResultUtils.setError(result, e.getMessage(), ResultUtils.NullList);

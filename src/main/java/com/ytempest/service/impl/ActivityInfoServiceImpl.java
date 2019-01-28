@@ -40,7 +40,7 @@ public class ActivityInfoServiceImpl implements ActivityInfoService {
                 throw new ServiceException("页码数必须要大于等于1");
             }
             if (pageNum > pageCount) {
-                throw new ServiceException(ServiceException.ACTIVITYLIST_END, "已经到底");
+                throw new ServiceException(ServiceException.ACTIVITY_LIST_END, "已经到底");
             }
 
             // 4、封装PageVO数据

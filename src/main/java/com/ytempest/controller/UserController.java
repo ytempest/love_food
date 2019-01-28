@@ -209,5 +209,22 @@ public class UserController {
         return result;
     }
 
+    /**
+     * 获取指定用户收藏的所有菜谱
+     */
+    @GetMapping("/collectList")
+    public BaseResult collectList(@RequestParam("userId") Long userId,
+                                  @RequestParam("pageNum") Integer pageNum,
+                                  @RequestParam("pageSize") Integer pageSize) {
+        BaseResult result = ResultUtils.result();
+        try {
+            PageVO<CookBaseInfoVO> list = userService.getCollectList(userId, pageNum, pageSize);
+            ResultUtils.setSuccess(result, "获取成功", list);
+        } catch (ServiceException e) {
+            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullObj);
+        }
+        return result;
+    }
+
 
 }

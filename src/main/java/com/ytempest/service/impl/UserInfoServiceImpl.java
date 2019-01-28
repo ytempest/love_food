@@ -2,6 +2,7 @@ package com.ytempest.service.impl;
 
 import com.ytempest.exception.ServiceException;
 import com.ytempest.mapper.CollectionInfoMapper;
+import com.ytempest.mapper.CookInfoMapper;
 import com.ytempest.mapper.UserInfoMapper;
 import com.ytempest.service.UserInfoService;
 import com.ytempest.util.DateUtils;
@@ -11,6 +12,7 @@ import com.ytempest.util.NumberUtils;
 import com.ytempest.util.SecurityUtils;
 import com.ytempest.util.Utils;
 import com.ytempest.vo.CollectionInfo;
+import com.ytempest.vo.CookBaseInfoVO;
 import com.ytempest.vo.PageVO;
 import com.ytempest.vo.UserInfoVO;
 
@@ -39,8 +41,12 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Resource(name = "UserInfoMapper")
     private UserInfoMapper userMapper;
+
     @Resource(name = "CollectionInfoMapper")
     private CollectionInfoMapper collectMapper;
+
+    @Resource(name = "CookInfoMapper")
+    private CookInfoMapper cookMapper;
 
     @Override
     public void addUser(UserInfoVO user) throws Exception {
@@ -262,6 +268,32 @@ public class UserInfoServiceImpl implements UserInfoService {
             }
         } catch (Exception e) {
             throw new ServiceException("操作失败，请重试");
+        }
+    }
+
+    @Override
+    public PageVO<CookBaseInfoVO> getCollectList(Long userId, Integer pageNum, Integer pageSize) throws ServiceException {
+        try {
+            long total = cookMapper.countCollectList(userId);
+            int pageCount = (int) (total % pageSize == 0
+                    ? total / pageSize
+                    : total / pageSize + 1);
+            // 判断输入的页码是否超过数据的页码范围
+            if (pageNum < 1) {
+                throw new ServiceException("页码数必须要大于等于1");
+            }
+            if (pageNum > pageCount) {
+                throw new ServiceException(ServiceException.USER_COLLECT_LIST_END, "已经到底");
+            }
+
+            // 封装PageVO数据
+            PageVO<CookBaseInfoVO> pageVO = new PageVO<>(total, pageSize, pageNum,
+                    pageCount);
+            pageVO.setList(cookMapper.selectCollectList(userId,
+                    (pageNum - 1) * pageSize, pageSize));
+            return pageVO;
+        } catch (SQLException e) {
+            throw new ServiceException("获取失败");
         }
     }
 }

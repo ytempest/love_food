@@ -15,7 +15,7 @@ public class ServiceException extends Exception {
     public static final int COOK_LIST_END = 4;
 
     // 页码数已经超出活动列表的结尾
-    public static final int ACTIVITYLIST_END = 5;
+    public static final int ACTIVITY_LIST_END = 5;
 
     // 页码数已经超出参与活动的菜谱列表的结尾
     public static final int PARTAKE_COOK_LIST_END = 6;
@@ -25,6 +25,9 @@ public class ServiceException extends Exception {
 
     // 页码数已经超出用户发布的话题列表的结尾
     public static final int USER_TOPIC_LIST_END = 8;
+
+    // 页码数已经超出用户收藏的菜谱列表长度
+    public static final int USER_COLLECT_LIST_END = 8;
 
 
     private int errorCode;

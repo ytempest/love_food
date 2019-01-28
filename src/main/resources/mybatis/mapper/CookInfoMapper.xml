@@ -82,6 +82,16 @@
 		SELECT COUNT(*) FROM cookbook WHERE cook_user_id=#{arg0}
 	</select>
 
+    <!-- 根据用户Id获取用户收藏的所有菜谱 -->
+    <select id="selectCollectList" resultMap="Cook_Base_Info">
+        SELECT c2.* FROM
+        (SELECT cook_id FROM collection WHERE user_id=#{arg0} LIMIT #{arg1},#{arg2}) c1
+        LEFT JOIN cookbook c2
+        ON c1.cook_id = c2.cook_id
+    </select>
+    <select id="countCollectList" resultType="Long">
+        SELECT COUNT(*) FROM collection WHERE user_id=#{arg0}
+    </select>
 
 
     <resultMap id="Cook_Base_Info" type="com.ytempest.vo.CookBaseInfoVO">
