@@ -6,6 +6,7 @@ import com.ytempest.util.LogUtils;
 import com.ytempest.util.ResultUtils;
 import com.ytempest.exception.ServiceException;
 import com.ytempest.service.UserInfoService;
+import com.ytempest.vo.ActivityInfoVO;
 import com.ytempest.vo.BaseResult;
 import com.ytempest.vo.CookBaseInfoVO;
 import com.ytempest.vo.PageVO;
@@ -130,11 +131,7 @@ public class UserController {
             PageVO<TopicInfoVO> topicList = topicService.getUserTopicList(userId, pageNum, pageSize);
             ResultUtils.setSuccess(result, "获取成功", topicList);
         } catch (ServiceException e) {
-            if (e.getErrorCode() == ServiceException.USER_TOPIC_LIST_END) {
-                ResultUtils.setError(result, "已经到底", ResultUtils.NullList);
-            } else {
-                ResultUtils.setError(result, e.getMessage(), ResultUtils.NullList);
-            }
+            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullList);
         }
         return result;
     }
@@ -219,6 +216,24 @@ public class UserController {
         BaseResult result = ResultUtils.result();
         try {
             PageVO<CookBaseInfoVO> list = userService.getCollectList(userId, pageNum, pageSize);
+            ResultUtils.setSuccess(result, "获取成功", list);
+        } catch (ServiceException e) {
+            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullObj);
+        }
+        return result;
+    }
+
+
+    /**
+     * 根据用户id获取用户参加的所有活动
+     */
+    @GetMapping("/activityList")
+    public BaseResult activityList(@RequestParam("userId") Long userId,
+                                   @RequestParam("pageNum") Integer pageNum,
+                                   @RequestParam("pageSize") Integer pageSize) {
+        BaseResult result = ResultUtils.result();
+        try {
+            PageVO<ActivityInfoVO> list = userService.getActivityList(userId, pageNum, pageSize);
             ResultUtils.setSuccess(result, "获取成功", list);
         } catch (ServiceException e) {
             ResultUtils.setError(result, e.getMessage(), ResultUtils.NullObj);

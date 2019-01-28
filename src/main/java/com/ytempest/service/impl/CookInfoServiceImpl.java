@@ -70,7 +70,7 @@ public class CookInfoServiceImpl implements CookInfoService {
                 throw new ServiceException("页码数必须要大于等于1");
             }
             if (pageNum > pageCount) {
-                throw new ServiceException(ServiceException.COOK_LIST_END, "已经到底");
+                throw new ServiceException("已经到底");
             }
 
             // 4、封装PageVO数据
@@ -309,7 +309,7 @@ public class CookInfoServiceImpl implements CookInfoService {
                 throw new ServiceException("页码数必须要大于等于1");
             }
             if (pageNum > pageCount) {
-                throw new ServiceException(ServiceException.PARTAKE_COOK_LIST_END, "已经到底");
+                throw new ServiceException("已经到底");
             }
 
             // 封装PageVO数据
@@ -336,7 +336,7 @@ public class CookInfoServiceImpl implements CookInfoService {
                 throw new ServiceException("页码数必须要大于等于1");
             }
             if (pageNum > pageCount) {
-                throw new ServiceException(ServiceException.USER_COOK_LIST_END, "已经到底");
+                throw new ServiceException("已经到底");
             }
 
             // 封装PageVO数据

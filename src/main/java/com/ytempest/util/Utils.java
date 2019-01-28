@@ -1,5 +1,6 @@
 package com.ytempest.util;
 
+import com.ytempest.exception.ServiceException;
 import com.ytempest.vo.UserInfoVO;
 
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -51,5 +52,21 @@ public class Utils {
         }
         return null;
     }
+
+
+    public static int getPageCount(Integer pageNum, Integer pageSize, long total) throws ServiceException {
+        int pageCount = (int) (total % pageSize == 0
+                ? total / pageSize
+                : total / pageSize + 1);
+        // 判断输入的页码是否超过数据的页码范围
+        if (pageNum < 1) {
+            throw new ServiceException("页码数必须要大于等于1");
+        }
+        if (pageNum > pageCount) {
+            throw new ServiceException("已经到底");
+        }
+        return pageCount;
+    }
+
 
 }

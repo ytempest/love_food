@@ -1,6 +1,8 @@
 package com.ytempest.service;
 
 import com.ytempest.exception.ServiceException;
+import com.ytempest.vo.ActivityDetailVO;
+import com.ytempest.vo.ActivityInfoVO;
 import com.ytempest.vo.CookBaseInfoVO;
 import com.ytempest.vo.PageVO;
 import com.ytempest.vo.UserInfoVO;
@@ -74,4 +76,6 @@ public interface UserInfoService {
     PageVO<CookBaseInfoVO> getCollectList(Long userId, Integer pageNum, Integer pageSize)
             throws ServiceException;
 
+    PageVO<ActivityInfoVO> getActivityList(Long userId, Integer pageNum, Integer pageSize)
+            throws ServiceException;
 }

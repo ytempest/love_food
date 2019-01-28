@@ -1,6 +1,7 @@
 package com.ytempest.service.impl;
 
 import com.ytempest.exception.ServiceException;
+import com.ytempest.mapper.ActivityInfoMapper;
 import com.ytempest.mapper.CollectionInfoMapper;
 import com.ytempest.mapper.CookInfoMapper;
 import com.ytempest.mapper.UserInfoMapper;
@@ -11,6 +12,7 @@ import com.ytempest.util.LogUtils;
 import com.ytempest.util.NumberUtils;
 import com.ytempest.util.SecurityUtils;
 import com.ytempest.util.Utils;
+import com.ytempest.vo.ActivityInfoVO;
 import com.ytempest.vo.CollectionInfo;
 import com.ytempest.vo.CookBaseInfoVO;
 import com.ytempest.vo.PageVO;
@@ -47,6 +49,9 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Resource(name = "CookInfoMapper")
     private CookInfoMapper cookMapper;
+
+    @Resource(name = "ActivityInfoMapper")
+    private ActivityInfoMapper actMapper;
 
     @Override
     public void addUser(UserInfoVO user) throws Exception {
@@ -275,16 +280,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     public PageVO<CookBaseInfoVO> getCollectList(Long userId, Integer pageNum, Integer pageSize) throws ServiceException {
         try {
             long total = cookMapper.countCollectList(userId);
-            int pageCount = (int) (total % pageSize == 0
-                    ? total / pageSize
-                    : total / pageSize + 1);
-            // 判断输入的页码是否超过数据的页码范围
-            if (pageNum < 1) {
-                throw new ServiceException("页码数必须要大于等于1");
-            }
-            if (pageNum > pageCount) {
-                throw new ServiceException(ServiceException.USER_COLLECT_LIST_END, "已经到底");
-            }
+
+            int pageCount = Utils.getPageCount(pageNum, pageSize, total);
 
             // 封装PageVO数据
             PageVO<CookBaseInfoVO> pageVO = new PageVO<>(total, pageSize, pageNum,
@@ -296,4 +293,24 @@ public class UserInfoServiceImpl implements UserInfoService {
             throw new ServiceException("获取失败");
         }
     }
+
+
+    @Override
+    public PageVO<ActivityInfoVO> getActivityList(Long userId, Integer pageNum, Integer pageSize) throws ServiceException {
+        try {
+            long total = actMapper.countActivityList(userId);
+
+            int pageCount = Utils.getPageCount(pageNum, pageSize, total);
+
+            // 封装PageVO数据
+            PageVO<ActivityInfoVO> pageVO = new PageVO<>(total, pageSize, pageNum,
+                    pageCount);
+            pageVO.setList(actMapper.selectActivityList(userId,
+                    (pageNum - 1) * pageSize, pageSize));
+            return pageVO;
+        } catch (SQLException e) {
+            throw new ServiceException("获取失败");
+        }
+    }
+
 }

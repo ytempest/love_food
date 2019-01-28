@@ -36,6 +36,17 @@
         ON p.cook_id=c.cook_id ORDER BY p1.prize_id ASC
     </select>
 
+    <!-- 根据用户Id获取用户参与的所有菜谱 -->
+    <select id="selectActivityList" resultMap="Activity_Base_Info">
+        SELECT a2.* FROM
+        (SELECT act_id FROM partakes_activity WHERE user_id=#{arg0} LIMIT #{arg1},#{arg2}) a1
+        LEFT JOIN activity a2
+        ON a1.act_id = a2.act_id
+    </select>
+    <select id="countActivityList" resultType="Long">
+        SELECT COUNT(*) FROM partakes_activity WHERE user_id=#{arg0}
+    </select>
+
 
     <resultMap id="Award_List" type="com.ytempest.vo.UserActivityPrizeVO">
         <id property="awaId" column="awa_id" />

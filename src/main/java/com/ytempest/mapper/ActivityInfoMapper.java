@@ -1,5 +1,6 @@
 package com.ytempest.mapper;
 
+import com.ytempest.exception.ServiceException;
 import com.ytempest.vo.ActivityDetailVO;
 import com.ytempest.vo.ActivityInfoVO;
 import com.ytempest.vo.CookBaseInfoVO;
@@ -23,4 +24,10 @@ public interface ActivityInfoMapper extends MapperSupport<ActivityInfoVO> {
     ActivityDetailVO selectDetailInfo(Long actId) throws SQLException;
 
     List<UserActivityPrizeVO> selectAwardList(Long actId) throws SQLException;
+
+    long countActivityList(Long userId) throws ServiceException;
+
+    List<ActivityInfoVO> selectActivityList(Long userId, Integer pageNum, Integer pageSize)
+            throws SQLException;
+
 }
