@@ -70,4 +70,15 @@
         <listener-class>com.ytempest.common.ProjectInitListener</listener-class>
     </listener>
 
+    <!-- 用于延迟请求的过滤器，主要用于测试 -->
+    <filter>
+        <filter-name>DelayFilter</filter-name>
+        <filter-class>com.ytempest.filter.DelayFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>DelayFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
 </web-app>
