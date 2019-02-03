@@ -13,7 +13,7 @@ public class TestUtils {
     public static void main(String[] args) {
         String str = "待签名数据fhefejk4324hJfasf&()*()&";
         String encrypt = encrypt(str);
-        System.out.println(" encrypt = " + encrypt);
+        System.out.println(" deprecatedEncode = " + encrypt);
         boolean result = validate(str, encrypt);
         System.out.println(" result = " + result);
 

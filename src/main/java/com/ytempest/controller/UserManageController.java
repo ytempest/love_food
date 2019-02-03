@@ -161,7 +161,7 @@ public class UserManageController {
             }
 
             if (!"".equals(userPwd)) {
-                userPwd = MD5Utils.encrypt(userPwd);
+                userPwd = MD5Utils.deprecatedEncode(userPwd);
                 userInfo.setUserPwd(userPwd);
             }
 
@@ -213,7 +213,7 @@ public class UserManageController {
             }
 
             if (!"".equals(userPwd)) {
-                userPwd = MD5Utils.encrypt(userPwd);
+                userPwd = MD5Utils.deprecatedEncode(userPwd);
                 userInfo.setUserPwd(userPwd);
             }
 

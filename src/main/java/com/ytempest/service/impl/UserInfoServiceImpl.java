@@ -232,12 +232,12 @@ public class UserInfoServiceImpl implements UserInfoService {
             UserInfoVO info = userMapper.selectById(String.valueOf(userId));
             String userPwd = info.getUserPwd();
             // 如果密码正确
-            if (userPwd.equals(MD5Utils.encrypt(oldPwd))) {
+            if (userPwd.equals(MD5Utils.deprecatedEncode(oldPwd))) {
                 // 如果前后输入的密码不一致
                 if (!newPwd.equals(confirmPwd)) {
                     throw new ServiceException("新密码不一致");
                 } else {
-                    info.setUserPwd(MD5Utils.encrypt(newPwd));
+                    info.setUserPwd(MD5Utils.deprecatedEncode(newPwd));
                     userMapper.updateById(info);
                 }
             } else {

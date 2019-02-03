@@ -1,6 +1,9 @@
 package com.ytempest.encrypt;
 
 import java.security.MessageDigest;
+import java.util.Date;
+
+import javax.xml.crypto.Data;
 
 public class MD5Utils {
 
@@ -15,9 +18,8 @@ public class MD5Utils {
         return encodeTOMD5(addSlatStr);
     }
 
-
     // FIXME: 2019/02/03 这个MD5编码需要进行处理
-    public static String encrypt(String str) {
+    public static String deprecatedEncode(String str) {
         str = encodeTOMD5(str);
 
         str = secondEncrypt(str);

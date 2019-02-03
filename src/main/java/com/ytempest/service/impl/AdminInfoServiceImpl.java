@@ -20,7 +20,7 @@ public class AdminInfoServiceImpl implements AdminInfoService {
 	public AdminInfoVO login(String account, String password)throws ServiceException {
 
 		AdminInfoVO vo = adminInfoMapper.selectByAccount(account);
-		String encryptedPassword = MD5Utils.encrypt(password.trim());
+		String encryptedPassword = MD5Utils.deprecatedEncode(password.trim());
 		
 		if(vo==null) {
 			throw new ServiceException(ServiceException.LOGIN_ADMIN_NOEXIT, "该账号不存在");
