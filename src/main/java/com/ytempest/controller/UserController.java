@@ -1,11 +1,13 @@
 package com.ytempest.controller;
 
+import com.ytempest.encrypt.DecryptUtils;
+import com.ytempest.encrypt.MD5Utils;
+import com.ytempest.exception.ServiceException;
 import com.ytempest.service.CookInfoService;
 import com.ytempest.service.TopicInfoService;
+import com.ytempest.service.UserInfoService;
 import com.ytempest.util.LogUtils;
 import com.ytempest.util.ResultUtils;
-import com.ytempest.exception.ServiceException;
-import com.ytempest.service.UserInfoService;
 import com.ytempest.vo.ActivityInfoVO;
 import com.ytempest.vo.BaseResult;
 import com.ytempest.vo.CookBaseInfoVO;
@@ -85,14 +87,20 @@ public class UserController {
 
         BaseResult result = ResultUtils.result();
         try {
+
+            String realPwd = DecryptUtils.decrypt(pwd);
+            String savePwd = MD5Utils.encode(realPwd);
+
             UserInfoVO userInfo = UserInfoVO.baseUserInfo();
             userInfo.setUserAccount(account);
-            userInfo.setUserPwd(pwd);
+            userInfo.setUserPwd(savePwd);
             userInfo.setUserPhone(phone);
             userInfo.setUserRegisterTime(new Date());
             userService.addUser(userInfo);
-            LogUtils.e(TAG, "register: user=" + userInfo);
+            LogUtils.d(TAG, "register: user=" + userInfo);
             ResultUtils.setSuccess(result, "注册成功", userInfo);
+        } catch (IllegalStateException e) {
+            ResultUtils.setError(result, "非法数据", ResultUtils.NullObj);
         } catch (Exception e) {
             ResultUtils.setError(result, "注册失败，请重试", ResultUtils.NullObj);
         }

@@ -149,10 +149,11 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public UserInfoVO login(String account, String password) throws ServiceException {
 
-        String decrypt = DecryptUtils.decrypt(password.trim());
-        String pwd = MD5Utils.encode(decrypt);
 
         try {
+            String decrypt = DecryptUtils.decrypt(password.trim());
+            String pwd = MD5Utils.encode(decrypt);
+
             UserInfoVO vo = userMapper.selectByAccount(account.trim());
 
             if (vo == null) {
@@ -161,6 +162,8 @@ public class UserInfoServiceImpl implements UserInfoService {
                 throw new ServiceException("密码错误");
             }
             return vo;
+        } catch (IllegalStateException e) {
+            throw new ServiceException("非法密码");
         } catch (SQLException e) {
             throw new ServiceException("账号异常");
         }
