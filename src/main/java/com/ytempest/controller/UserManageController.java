@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ytempest.util.SecurityUtils;
+import com.ytempest.encrypt.MD5Utils;
 import com.ytempest.service.UserInfoService;
 import com.ytempest.vo.PageVO;
 import com.ytempest.vo.UserInfoVO;
@@ -161,7 +161,7 @@ public class UserManageController {
             }
 
             if (!"".equals(userPwd)) {
-                userPwd = SecurityUtils.encrypt(userPwd);
+                userPwd = MD5Utils.encrypt(userPwd);
                 userInfo.setUserPwd(userPwd);
             }
 
@@ -213,7 +213,7 @@ public class UserManageController {
             }
 
             if (!"".equals(userPwd)) {
-                userPwd = SecurityUtils.encrypt(userPwd);
+                userPwd = MD5Utils.encrypt(userPwd);
                 userInfo.setUserPwd(userPwd);
             }
 

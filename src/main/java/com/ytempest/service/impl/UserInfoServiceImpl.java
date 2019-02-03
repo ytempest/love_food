@@ -1,5 +1,6 @@
 package com.ytempest.service.impl;
 
+import com.ytempest.encrypt.DecryptUtils;
 import com.ytempest.exception.ServiceException;
 import com.ytempest.mapper.ActivityInfoMapper;
 import com.ytempest.mapper.CollectionInfoMapper;
@@ -10,7 +11,7 @@ import com.ytempest.util.DateUtils;
 import com.ytempest.util.FileUtils;
 import com.ytempest.util.LogUtils;
 import com.ytempest.util.NumberUtils;
-import com.ytempest.util.SecurityUtils;
+import com.ytempest.encrypt.MD5Utils;
 import com.ytempest.util.Utils;
 import com.ytempest.vo.ActivityInfoVO;
 import com.ytempest.vo.CollectionInfo;
@@ -148,13 +149,15 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public UserInfoVO login(String account, String password) throws ServiceException {
 
+        String decrypt = DecryptUtils.decrypt(password.trim());
+        String pwd = MD5Utils.encode(decrypt);
+
         try {
             UserInfoVO vo = userMapper.selectByAccount(account.trim());
-            String encryptedPassword = SecurityUtils.encrypt(password.trim());
 
             if (vo == null) {
                 throw new ServiceException("该账号不存在");
-            } else if (!encryptedPassword.equals(vo.getUserPwd())) {
+            } else if (!pwd.equals(vo.getUserPwd())) {
                 throw new ServiceException("密码错误");
             }
             return vo;
@@ -229,12 +232,12 @@ public class UserInfoServiceImpl implements UserInfoService {
             UserInfoVO info = userMapper.selectById(String.valueOf(userId));
             String userPwd = info.getUserPwd();
             // 如果密码正确
-            if (userPwd.equals(SecurityUtils.encrypt(oldPwd))) {
+            if (userPwd.equals(MD5Utils.encrypt(oldPwd))) {
                 // 如果前后输入的密码不一致
                 if (!newPwd.equals(confirmPwd)) {
                     throw new ServiceException("新密码不一致");
                 } else {
-                    info.setUserPwd(SecurityUtils.encrypt(newPwd));
+                    info.setUserPwd(MD5Utils.encrypt(newPwd));
                     userMapper.updateById(info);
                 }
             } else {

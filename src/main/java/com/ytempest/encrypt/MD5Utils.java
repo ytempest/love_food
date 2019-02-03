@@ -1,19 +1,22 @@
-package com.ytempest.util;
+package com.ytempest.encrypt;
 
 import java.security.MessageDigest;
 
-public class SecurityUtils {
+public class MD5Utils {
 
-    public static void main(String[] args) {
-        System.out.println(encrypt("123"));
-    }
+    private static final String SLAT = "tempest";
 
     /**
-     * 将 str进行加密
-     *
-     * @param str 要进行加密的字符串
-     * @return
+     * 使用MD5进行编码，并加上两个盐
+     * 第二个盐是：字符的hash值
      */
+    public static String encode(String str) {
+        String addSlatStr = str + SLAT + str.hashCode();
+        return encodeTOMD5(addSlatStr);
+    }
+
+
+    // FIXME: 2019/02/03 这个MD5编码需要进行处理
     public static String encrypt(String str) {
         str = encodeTOMD5(str);
 
@@ -25,7 +28,6 @@ public class SecurityUtils {
      * 二次加密，加入自己的加密逻辑；将所有的a替换成b，b替换成c，依次类推，z不变，同时数字除外
      *
      * @param str 要进行二次加密的字符串
-     * @return
      */
     private static String secondEncrypt(String str) {
         StringBuffer sb = new StringBuffer(str);
@@ -45,7 +47,7 @@ public class SecurityUtils {
      * @param str 待加密的字符串
      * @return 加密后的字符串
      */
-    public static String encodeTOMD5(String str) {
+    private static String encodeTOMD5(String str) {
         MessageDigest md5 = null;
         try {
             md5 = MessageDigest.getInstance("MD5");
