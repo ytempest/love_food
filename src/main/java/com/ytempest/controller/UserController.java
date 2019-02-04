@@ -79,6 +79,7 @@ public class UserController {
 
     /**
      * 注册用户
+     * 如果手机号码或者账号已经注册，则不允许注册
      */
     @PostMapping("/register")
     public BaseResult register(@RequestParam("account") String account,
@@ -87,6 +88,20 @@ public class UserController {
 
         BaseResult result = ResultUtils.result();
         try {
+
+            // 1、判断手机号码是否已经注册
+            boolean isUse = userService.isPhoneHadRegister(phone);
+            if (isUse) {
+                ResultUtils.setSuccess(result, "该手机号码已经被注册", ResultUtils.NullObj);
+                return result;
+            }
+
+            // 2、判断该账号是否已经被使用
+            UserInfoVO judgeUserInfo = userService.selectByAccount(account);
+            if (judgeUserInfo != null) {
+                ResultUtils.setSuccess(result, "该账号已被使用", ResultUtils.NullObj);
+                return result;
+            }
 
             String realPwd = DecryptUtils.decrypt(pwd);
             String savePwd = MD5Utils.encode(realPwd);
@@ -102,6 +117,7 @@ public class UserController {
         } catch (IllegalStateException e) {
             ResultUtils.setError(result, "非法数据", ResultUtils.NullObj);
         } catch (Exception e) {
+            e.printStackTrace();
             ResultUtils.setError(result, "注册失败，请重试", ResultUtils.NullObj);
         }
         return result;

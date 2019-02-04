@@ -1,7 +1,6 @@
 package com.ytempest.service;
 
 import com.ytempest.exception.ServiceException;
-import com.ytempest.vo.ActivityDetailVO;
 import com.ytempest.vo.ActivityInfoVO;
 import com.ytempest.vo.CookBaseInfoVO;
 import com.ytempest.vo.PageVO;
@@ -52,7 +51,7 @@ public interface UserInfoService {
      */
     void updateUser(UserInfoVO model) throws Exception;
 
-    /* API */
+    /*--------- API ---------*/
 
     /**
      * 根据账号或者手机号、密码进行登录
@@ -78,4 +77,9 @@ public interface UserInfoService {
 
     PageVO<ActivityInfoVO> getActivityList(Long userId, Integer pageNum, Integer pageSize)
             throws ServiceException;
+
+    /**
+     * 判断该手机号码是否已经被注册
+     */
+    boolean isPhoneHadRegister(String phone)throws ServiceException;
 }

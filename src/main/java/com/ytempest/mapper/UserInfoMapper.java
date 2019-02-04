@@ -27,4 +27,9 @@ public interface UserInfoMapper extends MapperSupport<UserInfoVO> {
     List<UserInfoVO> fuzzySearchByAccount(String account, int index, int count);
 
     long countFuzzySearch(String account);
+
+    /*----------- API -----------*/
+
+    long countUserByPhone(String phone);
+
 }

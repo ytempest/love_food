@@ -171,6 +171,12 @@ public class UserInfoServiceImpl implements UserInfoService {
 
 
     @Override
+    public boolean isPhoneHadRegister(String phone) {
+        long count = userMapper.countUserByPhone(phone);
+        return count > 0;
+    }
+
+    @Override
     public UserInfoVO updateBaseUserInfo(HttpServletRequest request) throws ServiceException {
         UserInfoVO newInfo = obtainUserInfo(request);
         LogUtils.e(TAG, "updateBaseUserInfo: newInfo = " + newInfo);

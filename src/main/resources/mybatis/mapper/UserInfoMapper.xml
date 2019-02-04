@@ -89,6 +89,11 @@
 
     <!--**********   API   **********-->
 
+    <!-- 统计该手机号码的用户数量 -->
+    <select id="countUserByPhone" resultType="Long">
+		SELECT COUNT(*) FROM user_info WHERE user_phone = #{arg0}
+	</select>
+
     <select id="selectById" resultMap="UserInfo_Mapping">
 		select *
 		from user_info
