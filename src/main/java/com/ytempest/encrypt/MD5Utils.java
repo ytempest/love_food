@@ -1,13 +1,11 @@
 package com.ytempest.encrypt;
 
 import java.security.MessageDigest;
-import java.util.Date;
-
-import javax.xml.crypto.Data;
 
 public class MD5Utils {
 
     private static final String SLAT = "tempest";
+
 
     /**
      * 使用MD5进行编码，并加上两个盐

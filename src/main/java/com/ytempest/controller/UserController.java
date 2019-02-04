@@ -41,7 +41,7 @@ public class UserController {
     private TopicInfoService topicService;
 
     /**
-     * 根据账号和手机号码登录
+     * 只能使用账号登录
      */
     @PostMapping("/login")
     public BaseResult login(@RequestParam("account") String account,
