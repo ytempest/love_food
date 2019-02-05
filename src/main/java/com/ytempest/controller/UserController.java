@@ -92,14 +92,14 @@ public class UserController {
             // 1、判断手机号码是否已经注册
             boolean isUse = userService.isPhoneHadRegister(phone);
             if (isUse) {
-                ResultUtils.setSuccess(result, "该手机号码已经被注册", ResultUtils.NullObj);
+                ResultUtils.setError(result, "该手机号码已经被注册", ResultUtils.NullObj);
                 return result;
             }
 
             // 2、判断该账号是否已经被使用
             UserInfoVO judgeUserInfo = userService.selectByAccount(account);
             if (judgeUserInfo != null) {
-                ResultUtils.setSuccess(result, "该账号已被使用", ResultUtils.NullObj);
+                ResultUtils.setError(result, "该账号已被使用", ResultUtils.NullObj);
                 return result;
             }
 
@@ -180,7 +180,7 @@ public class UserController {
      * 修改用户密码
      */
     @PostMapping("/updatePwd")
-    public BaseResult register(@RequestParam("userId") Long userId,
+    public BaseResult updatePwd(@RequestParam("userId") Long userId,
                                @RequestParam("oldPwd") String oldPwd,
                                @RequestParam("newPwd") String newPwd,
                                @RequestParam("confirmPwd") String confirmPwd) {
