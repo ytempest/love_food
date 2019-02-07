@@ -81,5 +81,7 @@ public interface UserInfoService {
     /**
      * 判断该手机号码是否已经被注册
      */
-    boolean isPhoneHadRegister(String phone)throws ServiceException;
+    boolean isPhoneHadRegister(String phone) throws ServiceException;
+
+    UserInfoVO getUserInfoById(Long userId) throws ServiceException;
 }

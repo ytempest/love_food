@@ -177,6 +177,19 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
+    public UserInfoVO getUserInfoById(Long userId) throws ServiceException {
+        try {
+            UserInfoVO vo = userMapper.selectById(String.valueOf(userId));
+            if (vo == null) {
+                throw new ServiceException("该用户不存在");
+            }
+            return vo;
+        } catch (SQLException e) {
+            throw new ServiceException("获取失败");
+        }
+    }
+
+    @Override
     public UserInfoVO updateBaseUserInfo(HttpServletRequest request) throws ServiceException {
         UserInfoVO newInfo = obtainUserInfo(request);
         LogUtils.e(TAG, "updateBaseUserInfo: newInfo = " + newInfo);

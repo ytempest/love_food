@@ -1,11 +1,14 @@
 package com.ytempest.vo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class UserInfoVO {
     private Long userId;
     private String userAccount;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String userPwd;
     private String userHeadUrl;
     private String userSex;

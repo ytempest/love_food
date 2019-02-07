@@ -160,6 +160,19 @@ public class UserController {
         return result;
     }
 
+    @GetMapping("/info")
+    public BaseResult getUserInfo(@RequestParam("userId") Long userId) {
+
+        BaseResult result = ResultUtils.result();
+        try {
+            UserInfoVO userInfo = userService.getUserInfoById(userId);
+            ResultUtils.setSuccess(result, "获取成功", userInfo);
+        } catch (ServiceException e) {
+            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullObj);
+        }
+        return result;
+    }
+
     /**
      * 根据用户Id修改用户信息
      */
@@ -181,9 +194,9 @@ public class UserController {
      */
     @PostMapping("/updatePwd")
     public BaseResult updatePwd(@RequestParam("userId") Long userId,
-                               @RequestParam("oldPwd") String oldPwd,
-                               @RequestParam("newPwd") String newPwd,
-                               @RequestParam("confirmPwd") String confirmPwd) {
+                                @RequestParam("oldPwd") String oldPwd,
+                                @RequestParam("newPwd") String newPwd,
+                                @RequestParam("confirmPwd") String confirmPwd) {
 
         BaseResult result = ResultUtils.result();
         try {
