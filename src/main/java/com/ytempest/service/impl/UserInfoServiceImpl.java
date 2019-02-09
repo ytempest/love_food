@@ -192,10 +192,18 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public UserInfoVO updateBaseUserInfo(HttpServletRequest request) throws ServiceException {
         UserInfoVO newInfo = obtainUserInfo(request);
-        LogUtils.e(TAG, "updateBaseUserInfo: newInfo = " + newInfo);
+        LogUtils.d(TAG, "updateBaseUserInfo: newInfo = " + newInfo);
         try {
             UserInfoVO oldInfo = userMapper.selectById(String.valueOf(newInfo.getUserId()));
-            LogUtils.e(TAG, "updateBaseUserInfo: oldInfo = " + oldInfo);
+            LogUtils.d(TAG, "updateBaseUserInfo: oldInfo = " + oldInfo);
+
+            // 判断手机号码是否已经被使用
+            if (!oldInfo.getUserPhone().equals(newInfo.getUserPhone())) {
+                long count = userMapper.countUserByPhone(newInfo.getUserPhone());
+                if (count != 0) {
+                    throw new ServiceException("该手机号码已经被使用");
+                }
+            }
 
             Utils.update(oldInfo, newInfo);
             userMapper.updateById(oldInfo);
