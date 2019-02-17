@@ -259,19 +259,24 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public void updateUserPwd(Long userId, String oldPwd, String newPwd, String confirmPwd) throws ServiceException {
         try {
+            // 解密密码
+            oldPwd = DecryptUtils.decrypt(oldPwd);
+            newPwd = DecryptUtils.decrypt(newPwd);
+            confirmPwd = DecryptUtils.decrypt(confirmPwd);
+
             UserInfoVO info = userMapper.selectById(String.valueOf(userId));
             String userPwd = info.getUserPwd();
             // 如果密码正确
-            if (userPwd.equals(MD5Utils.deprecatedEncode(oldPwd))) {
+            if (userPwd.equals(MD5Utils.encode(oldPwd))) {
                 // 如果前后输入的密码不一致
                 if (!newPwd.equals(confirmPwd)) {
                     throw new ServiceException("新密码不一致");
                 } else {
-                    info.setUserPwd(MD5Utils.deprecatedEncode(newPwd));
+                    info.setUserPwd(MD5Utils.encode(newPwd));
                     userMapper.updateById(info);
                 }
             } else {
-                throw new ServiceException("密码错误");
+                throw new ServiceException("旧密码错误");
             }
         } catch (SQLException e) {
             throw new ServiceException("修改失败，请重试");
