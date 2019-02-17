@@ -1,6 +1,7 @@
 package com.ytempest.service.impl;
 
 import com.ytempest.encrypt.DecryptUtils;
+import com.ytempest.encrypt.MD5Utils;
 import com.ytempest.exception.ServiceException;
 import com.ytempest.mapper.ActivityInfoMapper;
 import com.ytempest.mapper.CollectionInfoMapper;
@@ -11,7 +12,6 @@ import com.ytempest.util.DateUtils;
 import com.ytempest.util.FileUtils;
 import com.ytempest.util.LogUtils;
 import com.ytempest.util.NumberUtils;
-import com.ytempest.encrypt.MD5Utils;
 import com.ytempest.util.Utils;
 import com.ytempest.vo.ActivityInfoVO;
 import com.ytempest.vo.CollectionInfo;
@@ -204,9 +204,10 @@ public class UserInfoServiceImpl implements UserInfoService {
                     throw new ServiceException("该手机号码已经被使用");
                 }
             }
-
+            String oldHead = oldInfo.getUserHeadUrl();
             Utils.update(oldInfo, newInfo);
             userMapper.updateById(oldInfo);
+            FileUtils.deleteImage(oldHead);
             return oldInfo;
         } catch (SQLException e) {
             FileUtils.deleteImage(newInfo.getUserHeadUrl());
