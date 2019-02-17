@@ -104,8 +104,8 @@ public class CookController {
     public BaseResult updateCook(HttpServletRequest request) {
         BaseResult result = ResultUtils.result();
         try {
-            service.updateCook(request);
-            ResultUtils.setSuccess(result, "修改成功", ResultUtils.NullObj);
+            CookDetailInfoVO detailInfoVO = service.updateCook(request);
+            ResultUtils.setSuccess(result, "修改成功", detailInfoVO);
         } catch (ServiceException e) {
             ResultUtils.setError(result, e.getMessage(), ResultUtils.NullObj);
         }

@@ -145,7 +145,7 @@ public class CookInfoServiceImpl implements CookInfoService {
     }
 
     @Override
-    public void updateCook(HttpServletRequest request) throws ServiceException {
+    public CookDetailInfoVO updateCook(HttpServletRequest request) throws ServiceException {
         try {
             CookBaseInfoVO newCookInfo = obtainCook(request);
             Long cookId = newCookInfo.getCookId();
@@ -165,10 +165,10 @@ public class CookInfoServiceImpl implements CookInfoService {
 
             // 删除旧菜谱的成品图片和步骤的图片
             deleteCookImage(oldCookInfo, oldProceList);
+            return cookMapper.selectCook(cookId);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new ServiceException("修改失败");
         }
-
     }
 
     private List<MainmaterialsVO> obtainMainmaterials(HttpServletRequest request, long cookId) {

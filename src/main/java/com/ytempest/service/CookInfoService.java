@@ -5,9 +5,6 @@ import com.ytempest.vo.CookBaseInfoVO;
 import com.ytempest.vo.CookDetailInfoVO;
 import com.ytempest.vo.PageVO;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -24,7 +21,7 @@ public interface CookInfoService {
 
     void deleteCook(Long cookId) throws ServiceException;
 
-    void updateCook(HttpServletRequest request) throws ServiceException;
+    CookDetailInfoVO updateCook(HttpServletRequest request) throws ServiceException;
 
     /**
      * 根据活动Id获取参与活动的所有菜谱
