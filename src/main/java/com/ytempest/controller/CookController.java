@@ -50,7 +50,7 @@ public class CookController {
 
 
     /**
-     * 获取菜谱列表
+     * 获取菜谱信息
      */
     @GetMapping("/info")
     public BaseResult getCookInfo(@RequestParam("cookId") Long cookId) {

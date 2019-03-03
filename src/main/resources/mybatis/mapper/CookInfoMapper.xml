@@ -9,7 +9,7 @@
 
     <select id="selectCookList" resultMap="Cook_Base_Info">
         SELECT * FROM cookbook
-        WHERE cook_group=#{arg0} AND cook_type=#{arg1} LIMIT #{arg2},#{arg3}
+        WHERE cook_group=#{arg0} AND cook_type=#{arg1} ORDER BY cook_publish_time DESC LIMIT #{arg2},#{arg3}
 	</select>
 
     <select id="countCookList" resultType="Long">
