@@ -59,8 +59,12 @@ public class CookInfoServiceImpl implements CookInfoService {
     public PageVO<CookBaseInfoVO> getCookList(String cookGroup, String cookType,
                                               Integer pageNum, Integer pageSize) throws ServiceException {
         try {
-            // 获取用户的记录总数
+            // 获取记录总数
             long total = cookMapper.countCookList(cookGroup, cookType);
+            if (total == 0) {
+                throw new ServiceException("亲，该分类暂无菜谱");
+            }
+
             // 计算总页面数
             int pageCount = (int) (total % pageSize == 0
                     ? total / pageSize

@@ -51,6 +51,9 @@ public class TopicInfoServiceImpl implements TopicInfoService {
         try {
             // 获取用户的记录总数
             long total = topicMapper.countAll();
+            if (total == 0) {
+                throw new ServiceException("亲，当前暂无话题");
+            }
             // 计算总页面数
             int pageCount = (int) (total % pageSize == 0
                     ? total / pageSize
@@ -137,6 +140,9 @@ public class TopicInfoServiceImpl implements TopicInfoService {
     public PageVO<TopicInfoVO> getUserTopicList(Long userId, Integer pageNum, Integer pageSize) throws ServiceException {
         try {
             long total = topicMapper.countUserTopicList(userId);
+            if (total == 0) {
+                throw new ServiceException("亲，您还没发布过话题");
+            }
             int pageCount = (int) (total % pageSize == 0
                     ? total / pageSize
                     : total / pageSize + 1);

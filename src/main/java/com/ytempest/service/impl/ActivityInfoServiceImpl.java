@@ -31,6 +31,9 @@ public class ActivityInfoServiceImpl implements ActivityInfoService {
         try {
             // 获取活动的记录总数
             long total = actMapper.countAll();
+            if (total == 0) {
+                throw new ServiceException("亲，当前暂无活动");
+            }
             // 计算总页面数
             int pageCount = (int) (total % pageSize == 0
                     ? total / pageSize
