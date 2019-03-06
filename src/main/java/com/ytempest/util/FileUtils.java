@@ -37,6 +37,10 @@ public class FileUtils {
         return PROJECT_PATH + File.separator + Configure.USER_HEAD_DIR;
     }
 
+    public static String getActivityImageDir() {
+        return PROJECT_PATH + File.separator + Configure.ACTIVITY_DIR;
+    }
+
     public static String generateTopicImageUrl(String name) {
         return String.format("/%s/%s",
                 Configure.TOPIC_IMAGE_DIR, name);
@@ -81,5 +85,6 @@ public class FileUtils {
         String COOK_IMAGE_DIR = IMAGE_DIR + "/cookImage";
         String COOK_PROCEDURE_DIR = IMAGE_DIR + "/cookProcedure";
         String USER_HEAD_DIR = IMAGE_DIR + "/userHead";
+        String ACTIVITY_DIR = IMAGE_DIR + "/activityImage";
     }
 }

@@ -37,6 +37,11 @@ public class ProjectInitListener implements ServletContextListener {
             LogUtils.d(TAG, "contextInitialized: 创建存放菜谱步骤图片的文件夹，创建结果：成功");
         }
 
+        // 初始化存放活动封面的文件夹
+        if (FileUtils.initDirs(FileUtils.getActivityImageDir())) {
+            LogUtils.d(TAG, "contextInitialized: 创建存放活动封面的文件夹，创建结果：成功");
+        }
+
         // 初始化存放用户头像的文件夹
         if (FileUtils.initDirs(FileUtils.getUserHeadDir())) {
             LogUtils.d(TAG, "contextInitialized: 创建存放用户头像的文件夹，创建结果：成功");
