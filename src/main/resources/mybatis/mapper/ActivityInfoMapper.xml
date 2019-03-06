@@ -8,7 +8,7 @@
 	</select>
 
     <select id="selectList" resultMap="Activity_Base_Info">
-        SELECT * FROM activity LIMIT #{arg0},#{arg1}
+        SELECT * FROM activity ORDER BY act_finish_time DESC LIMIT #{arg0},#{arg1}
 	</select>
 
     <select id="selectDetailInfo" resultMap="Activity_Detail_Info">
