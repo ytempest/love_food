@@ -80,8 +80,36 @@ public class TopicInfoServiceImpl implements TopicInfoService {
 
 
     @Override
-    public List<TopicCommentInfoVO> getCommentListById(long topicId) throws Exception {
-        return topicMapper.selectCommentListById(String.valueOf(topicId));
+    public PageVO<TopicCommentInfoVO> getCommentListById(long topicId, int pageNum, int pageSize) throws Exception {
+        try {
+            // 获取用户的记录总数
+            long total = topicMapper.countCommentAll(topicId);
+            if (total == 0) {
+                throw new ServiceException("亲，当前暂无评论");
+            }
+
+            // 计算总页面数
+            int pageCount = (int) (total % pageSize == 0
+                    ? total / pageSize
+                    : total / pageSize + 1);
+            // 判断输入的页码是否超过数据的页码范围
+            if (pageNum < 1) {
+                throw new ServiceException("页码数必须要大于等于1");
+            }
+            if (pageNum > pageCount) {
+                throw new ServiceException("已经到底");
+            }
+
+            // 4、封装PageVO数据
+            PageVO<TopicCommentInfoVO> pageVO = new PageVO<TopicCommentInfoVO>(total, pageSize, pageNum,
+                    pageCount);
+            pageVO.setList(topicMapper.selectCommentListById(topicId, (pageNum - 1) * pageSize, pageSize));
+
+            return pageVO;
+
+        } catch (SQLException e) {
+            throw new ServiceException("获取失败");
+        }
     }
 
     @Override

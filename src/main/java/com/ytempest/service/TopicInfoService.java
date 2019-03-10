@@ -31,7 +31,7 @@ public interface TopicInfoService {
     /**
      * 根据话题Id获取该话题的所有评论列表
      */
-    List<TopicCommentInfoVO> getCommentListById(long topicId) throws Exception;
+    PageVO<TopicCommentInfoVO> getCommentListById(long topicId, int pageNum, int pageSize) throws Exception;
 
     List<TopicDetailCommentVO> getCommentInfo(Integer topicId, Integer commentId,
                                               Integer replyToUser) throws Exception;

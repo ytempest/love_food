@@ -15,7 +15,7 @@ public interface TopicInfoMapper extends MapperSupport<BaseTopicInfoVO> {
 
     List<TopicInfoVO> selectTopicList(int index, int len) throws SQLException;
 
-    List<TopicCommentInfoVO> selectCommentListById(String id) throws SQLException;
+    List<TopicCommentInfoVO> selectCommentListById(long id, int pageNum, int pageSize) throws SQLException;
 
     List<TopicDetailCommentVO> selectDetailComment(Integer topicId, Integer commentId,
                                                    Integer replyToUser);
@@ -24,4 +24,6 @@ public interface TopicInfoMapper extends MapperSupport<BaseTopicInfoVO> {
             throws SQLException;
 
     long countUserTopicList(Long userId) throws SQLException;
+
+    long countCommentAll(long topicId);
 }

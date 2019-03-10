@@ -64,13 +64,15 @@ public class TopicController {
      * 获取话题的详细信息
      */
     @GetMapping("/info")
-    public BaseResult getTopicInfo(@RequestParam("topicId") Integer topicId) {
+    public BaseResult getTopicInfo(@RequestParam("topicId") Long topicId,
+                                   @RequestParam("pageNum") Integer pageNum,
+                                   @RequestParam("pageSize") Integer pageSize) {
         BaseResult result = ResultUtils.result();
         try {
-            List<TopicCommentInfoVO> commentList = topicService.getCommentListById(topicId);
+            PageVO<TopicCommentInfoVO> commentList = topicService.getCommentListById(topicId, pageNum, pageSize);
             ResultUtils.setSuccess(result, "获取成功", commentList);
         } catch (Exception e) {
-            ResultUtils.setSuccess(result, "获取成功", ResultUtils.NullList);
+            ResultUtils.setSuccess(result, e.getMessage(), ResultUtils.NullList);
         }
         return result;
     }
@@ -88,7 +90,7 @@ public class TopicController {
             List<TopicDetailCommentVO> commentList = topicService.getCommentInfo(topicId, commentId, replyToUser);
             ResultUtils.setSuccess(result, "获取成功", commentList);
         } catch (Exception e) {
-            ResultUtils.setSuccess(result, "获取成功", ResultUtils.NullList);
+            ResultUtils.setError(result, "获取成功", ResultUtils.NullList);
         }
         return result;
     }
