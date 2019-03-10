@@ -72,7 +72,7 @@ public class TopicController {
             PageVO<TopicCommentInfoVO> commentList = topicService.getCommentListById(topicId, pageNum, pageSize);
             ResultUtils.setSuccess(result, "获取成功", commentList);
         } catch (Exception e) {
-            ResultUtils.setSuccess(result, e.getMessage(), ResultUtils.NullList);
+            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullList);
         }
         return result;
     }
