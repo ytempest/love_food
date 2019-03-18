@@ -72,7 +72,7 @@ public class TopicController {
             PageVO<TopicCommentInfoVO> commentList = topicService.getCommentListById(topicId, pageNum, pageSize);
             ResultUtils.setSuccess(result, "获取成功", commentList);
         } catch (Exception e) {
-            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullList);
+            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullObj);
         }
         return result;
     }
@@ -102,17 +102,17 @@ public class TopicController {
     public BaseResult addComment(
             @RequestParam("topicId") Long topicId,
             @RequestParam("content") String content,
-            @RequestParam("time") Long time,
             @RequestParam("fromUser") Long fromUser,
             @RequestParam("toUser") Long toUser) {
         BaseResult result = ResultUtils.result();
 
+        long time = System.currentTimeMillis();
         CommentInfoVO comment = new CommentInfoVO(
                 null, topicId, content, new Date(time), fromUser, toUser);
 
         try {
             commentService.addComment(comment);
-            ResultUtils.setSuccess(result, "评论成功", ResultUtils.NullObj);
+            ResultUtils.setSuccess(result, "评论成功", comment);
         } catch (ServiceException e) {
             ResultUtils.setError(result, e.getMessage(), ResultUtils.NullObj);
         }
