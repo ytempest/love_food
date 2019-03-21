@@ -54,7 +54,7 @@ public class ActivityController {
             PageVO<ActivityInfoVO> list = actService.getActivityList(pageNum, pageSize);
             ResultUtils.setSuccess(result, "获取成功", list);
         } catch (ServiceException e) {
-            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullList);
+            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullObj);
         }
 
         return result;
@@ -71,7 +71,7 @@ public class ActivityController {
             ActivityInfoVO activityInfo = actService.getActivityInfo(actId);
             ResultUtils.setSuccess(result, "获取成功", activityInfo);
         } catch (ServiceException e) {
-            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullList);
+            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullObj);
         }
 
         return result;
@@ -89,7 +89,7 @@ public class ActivityController {
             PartakeActivityVO info = parService.isPartake(userId, actId);
             ResultUtils.setSuccess(result, "查询成功", info != null);
         } catch (ServiceException e) {
-            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullList);
+            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullObj);
         }
 
         return result;

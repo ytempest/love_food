@@ -54,7 +54,7 @@ public class TopicController {
             PageVO<TopicInfoVO> topicList = topicService.getTopicList(pageNum, pageSize);
             ResultUtils.setSuccess(result, "获取成功", topicList);
         } catch (ServiceException e) {
-            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullList);
+            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullObj);
         }
         return result;
     }
@@ -90,7 +90,7 @@ public class TopicController {
             List<TopicDetailCommentVO> commentList = topicService.getCommentInfo(topicId, commentId, replyToUser);
             ResultUtils.setSuccess(result, "获取成功", commentList);
         } catch (Exception e) {
-            ResultUtils.setError(result, "获取成功", ResultUtils.NullList);
+            ResultUtils.setError(result, "获取成功", ResultUtils.NullObj);
         }
         return result;
     }

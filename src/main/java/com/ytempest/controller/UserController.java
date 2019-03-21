@@ -155,7 +155,7 @@ public class UserController {
             PageVO<TopicInfoVO> topicList = topicService.getUserTopicList(userId, pageNum, pageSize);
             ResultUtils.setSuccess(result, "获取成功", topicList);
         } catch (ServiceException e) {
-            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullList);
+            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullObj);
         }
         return result;
     }
