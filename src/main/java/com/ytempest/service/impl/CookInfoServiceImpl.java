@@ -313,7 +313,7 @@ public class CookInfoServiceImpl implements CookInfoService {
                 throw new ServiceException("页码数必须要大于等于1");
             }
             if (pageNum > pageCount) {
-                throw new ServiceException("已经到底");
+                throw new ServiceException("暂无参赛作品");
             }
 
             // 封装PageVO数据
