@@ -16,7 +16,7 @@
         (
         SELECT * FROM (
         SELECT topics.*,user_info.user_head_url,user_info.user_account FROM topics
-        LEFT JOIN user_info ON topics.user_id = user_info.user_id) t1
+        LEFT JOIN user_info ON topics.user_id = user_info.user_id LIMIT #{arg0},#{arg1}) t1
         LEFT JOIN
         (SELECT topic_id AS topic_id2,COUNT(*) AS comment_count FROM comments GROUP BY topic_id) c
         ON t1.topic_id = c.topic_id2
@@ -25,7 +25,7 @@
         ON t1.topic_id  = z.topic_id3
         ) t2
         LEFT JOIN topic_images
-        ON t2.topic_id = topic_images.topic_id ORDER BY topic_publish_time DESC  LIMIT #{arg0},#{arg1}
+        ON t2.topic_id = topic_images.topic_id ORDER BY topic_publish_time DESC
 	</select>
 
     <select id="countAll" resultType="Long">

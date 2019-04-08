@@ -1,11 +1,10 @@
 package com.ytempest.controller;
 
-import com.ytempest.util.LogUtils;
-import com.ytempest.util.ResultUtils;
 import com.ytempest.exception.ServiceException;
 import com.ytempest.service.CommentInfoService;
 import com.ytempest.service.ReplyInfoService;
 import com.ytempest.service.TopicInfoService;
+import com.ytempest.util.ResultUtils;
 import com.ytempest.vo.BaseResult;
 import com.ytempest.vo.BaseTopicInfoVO;
 import com.ytempest.vo.CommentInfoVO;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -157,13 +155,12 @@ public class TopicController {
             topic.setUserId(Long.valueOf(request.getParameter("userId")));
             topic.setTopicTitle(request.getParameter("topicTitle"));
             topic.setTopicContent(request.getParameter("topicContent"));
-            topic.setTopicPublishTime(
-                    new Date(Long.valueOf(request.getParameter("publishTime"))));
+            topic.setTopicPublishTime(new Date(System.currentTimeMillis()));
 
             topicService.addTopic(topic, request);
             ResultUtils.setSuccess(result, "发布成功", ResultUtils.NullObj);
         } catch (ServiceException e) {
-            ResultUtils.setError(result, "发布失败", ResultUtils.NullObj);
+            ResultUtils.setError(result, e.getMessage(), ResultUtils.NullObj);
         }
         return result;
     }
