@@ -156,10 +156,12 @@ public class TopicInfoServiceImpl implements TopicInfoService {
                 }
             }
 
-            try {
-                imageMapper.insertList(imageList);
-            } catch (SQLException e) {
-                throw new ServiceException("插入失败");
+            if (imageList.size() != 0) {
+                try {
+                    imageMapper.insertList(imageList);
+                } catch (SQLException e) {
+                    throw new ServiceException("插入失败");
+                }
             }
         }
     }
