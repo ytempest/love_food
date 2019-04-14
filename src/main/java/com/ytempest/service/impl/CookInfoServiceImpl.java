@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -274,7 +275,7 @@ public class CookInfoServiceImpl implements CookInfoService {
             vo.setCookUserId(NumberUtils.parseLong(request.getParameter("cookUserId")));
             vo.setCookTitle(request.getParameter("cookTitle"));
             vo.setCookDesc(request.getParameter("cookDesc"));
-            vo.setCookPublishTime(DateUtils.parseDate(request.getParameter("cookPublishTime")));
+            vo.setCookPublishTime(new Date(System.currentTimeMillis()));
 
             if (Utils.isHaveMultipart(request)) {
                 //将request变成多部分request

@@ -69,7 +69,7 @@ public interface UserInfoService {
     boolean isCollect(Long userId, Long cookId)
             throws ServiceException;
 
-    void collectCook(Long userId, Long cookId)
+    boolean collectCook(Long userId, Long cookId)
             throws ServiceException;
 
     PageVO<CookBaseInfoVO> getCollectList(Long userId, Integer pageNum, Integer pageSize)

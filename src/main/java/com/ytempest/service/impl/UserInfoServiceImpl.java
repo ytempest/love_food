@@ -298,7 +298,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public void collectCook(Long userId, Long cookId) throws ServiceException {
+    public boolean collectCook(Long userId, Long cookId) throws ServiceException {
         CollectionInfo info = null;
         try {
             info = collectMapper.selectBy(userId, cookId);
@@ -306,9 +306,11 @@ public class UserInfoServiceImpl implements UserInfoService {
             if (info == null) {
                 info = new CollectionInfo(null, userId, cookId);
                 collectMapper.insert(info);
+                return true;
             } else {
-                // 如果已经收藏
+                // 如果已经收藏则取消收藏
                 collectMapper.deleteById(info.getCollectId());
+                return false;
             }
         } catch (Exception e) {
             throw new ServiceException("操作失败，请重试");

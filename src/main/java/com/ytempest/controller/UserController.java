@@ -235,8 +235,9 @@ public class UserController {
 
         BaseResult result = ResultUtils.result();
         try {
-            userService.collectCook(userId, cookId);
-            ResultUtils.setSuccess(result, "操作成功", ResultUtils.NullObj);
+            boolean isCollection = userService.collectCook(userId, cookId);
+            ResultUtils.setSuccess(result,
+                    isCollection ? "收藏成功" : "已取消收藏", isCollection);
         } catch (ServiceException e) {
             ResultUtils.setError(result, e.getMessage(), ResultUtils.NullObj);
         }
