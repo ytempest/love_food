@@ -117,7 +117,7 @@
 
         <result property="userHeadUrl" column="user_head_url" />
         <result property="userAccount" column="user_account" />
-        <result property="collectCount" column="collect_count" />
+        <result property="collectCount" column="coolection_count" />
 
         <collection property="mainList" ofType="com.ytempest.vo.MainmaterialsVO">
             <result property="mainName" column="main_name" />

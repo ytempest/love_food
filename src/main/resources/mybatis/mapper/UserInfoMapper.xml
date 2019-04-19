@@ -70,7 +70,6 @@
 		user_phone = #{userPhone},
 		user_email = #{userEmail},
 		user_qq = #{userQQ},
-		user_register_time = #{userRegisterTime},
 		user_status = #{userStatus}
 		WHERE
 		user_account = #{userAccount};

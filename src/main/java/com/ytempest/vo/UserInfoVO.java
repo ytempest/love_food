@@ -21,7 +21,7 @@ public class UserInfoVO {
 
     public static UserInfoVO baseUserInfo() {
         UserInfoVO vo = new UserInfoVO();
-        vo.setUserHeadUrl("/user/default.png");
+        vo.setUserHeadUrl("/image/userHead/default.png");
         vo.setUserSex("");
         // 默认时间戳为 2000-01-01 00:00:00
         vo.setUserBirth(new Date(946656000000L));
